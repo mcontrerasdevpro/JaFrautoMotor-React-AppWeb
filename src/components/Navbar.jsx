@@ -121,6 +121,20 @@ export const Navbar = () => {
             </NavLink>
           </div>
 
+          {/* --- CUENTA DE CLIENTE --- */}
+          <div className="ms-xl-3 d-flex align-items-center gap-2 my-2 my-xl-0">
+            {store.usuario ? (
+              <NavLink to="/mi-cuenta" className="nav-link fw-bold text-black">
+                <i className="fa-solid fa-user me-1 small"></i> {store.usuario.name?.split(" ")[0]?.toUpperCase()}
+              </NavLink>
+            ) : (
+              <>
+                <NavLink to="/login" className="nav-link fw-bold text-black">Iniciar sesión</NavLink>
+                <NavLink to="/registro" className="btn btn-sm btn-outline-danger rounded-0 fw-bold">Registrarse</NavLink>
+              </>
+            )}
+          </div>
+
         </div>
       </div>
     </nav>

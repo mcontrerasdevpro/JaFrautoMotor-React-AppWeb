@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useGlobalReducer from "../hooks/useGlobalReducer";
+import { apiFetch } from "../api";
 
 export const PanelInterno = () => {
-    const { store, dispatch } = useGlobalReducer();
-    const { urgente } = store;
+    const [citas, setCitas] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     // Protección: Si no hay clave en la sesión, fuera
@@ -14,10 +15,37 @@ export const PanelInterno = () => {
         }
     }, [navigate]);
 
+    const cargarCitas = async () => {
+        setCargando(true);
+        try {
+            const data = await apiFetch("/appointments");
+            setCitas(data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setCargando(false);
+        }
+    };
+
+    useEffect(() => {
+        cargarCitas();
+    }, []);
+
     const cerrarSesion = () => {
         sessionStorage.removeItem("admin_auth");
         navigate("/");
     };
+
+    const marcarAtendida = async (id) => {
+        try {
+            await apiFetch(`/appointment/${id}/status`, { method: "PATCH", body: { status: "Completada" } });
+            cargarCitas();
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const pendientes = citas.filter(c => c.status === "Pendiente");
 
     return (
         <div className="container mt-5 pt-5 text-dark" style={{ minHeight: "85vh" }}>
@@ -28,6 +56,8 @@ export const PanelInterno = () => {
                 </button>
             </div>
 
+            {error && <div className="alert alert-danger">{error}</div>}
+
             <div className="row g-4 mb-5">
                 {/* INDICADORES RÁPIDOS */}
                 <div className="col-md-4">
@@ -35,7 +65,7 @@ export const PanelInterno = () => {
                         <div className="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 className="text-uppercase fw-bold opacity-75 mb-1 small">Citas en espera</h6>
-                                <h2 className="display-4 fw-bold mb-0">{urgente.length}</h2>
+                                <h2 className="display-4 fw-bold mb-0">{pendientes.length}</h2>
                             </div>
                             <i className="fa-solid fa-calendar-check fa-3x opacity-25"></i>
                         </div>
@@ -54,41 +84,55 @@ export const PanelInterno = () => {
                         <table className="table table-hover align-middle mb-0">
                             <thead className="table-light text-uppercase small fw-bold">
                                 <tr>
-                                    <th className="ps-4 py-3">Servicio Solicitado</th>
+                                    <th className="ps-4 py-3">Cliente</th>
+                                    <th>Servicios</th>
+                                    <th>Fecha</th>
                                     <th>Importe</th>
                                     <th>Estado</th>
                                     <th className="text-end pe-4">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {urgente.length === 0 ? (
+                                {cargando ? (
                                     <tr>
-                                        <td colSpan="4" className="text-center py-5 text-muted italic">
+                                        <td colSpan="6" className="text-center py-5 text-muted">Cargando...</td>
+                                    </tr>
+                                ) : citas.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-5 text-muted italic">
                                             No hay citas pendientes de procesar.
                                         </td>
                                     </tr>
                                 ) : (
-                                    urgente.map((cita) => (
+                                    citas.map((cita) => (
                                         <tr key={cita.id}>
                                             <td className="ps-4">
-                                                <div className="fw-bold">{cita.name}</div>
-                                                <small className="text-muted">Ref: {cita.id}</small>
+                                                <div className="fw-bold">{cita.client}</div>
+                                                <small className="text-muted">{cita.contact} · Ref: {cita.id}</small>
+                                            </td>
+                                            <td className="small">
+                                                {(cita.services || []).map(s => s.name).join(", ")}
+                                            </td>
+                                            <td className="small">{cita.date} {cita.time}</td>
+                                            <td>
+                                                <span className="fw-bold text-danger">{cita.total}€</span>
                                             </td>
                                             <td>
-                                                <span className="fw-bold text-danger">{cita.precio}€</span>
-                                            </td>
-                                            <td>
-                                                <span className="badge bg-warning text-dark px-3 rounded-pill small">Pendiente</span>
+                                                <span className={`badge px-3 rounded-pill small ${
+                                                    cita.status === "Pendiente" ? "bg-warning text-dark" :
+                                                    cita.status === "Cancelada" ? "bg-secondary" : "bg-success"
+                                                }`}>{cita.status}</span>
                                             </td>
                                             <td className="text-end pe-4">
-                                                {/* Botón para borrar la cita una vez atendida */}
-                                                <button 
-                                                    className="btn btn-sm btn-outline-danger border-0"
-                                                    onClick={() => dispatch({ type: 'toggle_urgente', payload: cita })}
-                                                    title="Completar y archivar"
-                                                >
-                                                    <i className="fa-solid fa-check-double me-1"></i> ATENDIDA
-                                                </button>
+                                                {cita.status === "Pendiente" && (
+                                                    <button
+                                                        className="btn btn-sm btn-outline-danger border-0"
+                                                        onClick={() => marcarAtendida(cita.id)}
+                                                        title="Completar y archivar"
+                                                    >
+                                                        <i className="fa-solid fa-check-double me-1"></i> ATENDIDA
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))
@@ -97,11 +141,6 @@ export const PanelInterno = () => {
                         </table>
                     </div>
                 </div>
-            </div>
-            
-            <div className="mt-4 p-3 bg-light border-start border-4 border-dark small text-muted">
-                <i className="fa-solid fa-circle-info me-2"></i>
-                Estas citas se guardan en el navegador local. Si cambias de ordenador, la lista será distinta.
             </div>
         </div>
     );

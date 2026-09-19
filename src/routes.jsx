@@ -18,6 +18,10 @@ import { Urgente } from "./pages/Urgente";
 import { AccesoGestion } from "./pages/AccesoGestion";
 import { PanelInterno } from "./pages/PanelInterno";
 import { Cookies } from "./pages/Cookies";
+import { Login } from "./pages/Login";
+import { Registro } from "./pages/Registro";
+import { MiCuenta } from "./pages/MiCuenta";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 
 export const router = createBrowserRouter(
@@ -40,10 +44,17 @@ export const router = createBrowserRouter(
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/taller" element={<Taller />} />
         <Route path="/promociones" element={<Promociones />} />
-        <Route path="/urgente" element={<Urgente />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
         <Route path="/gestion" element={<AccesoGestion />} />
         <Route path="/panel-interno" element={<PanelInterno />} />
         <Route path="/cookies" element={<Cookies />} />
+
+        {/* Rutas que requieren estar registrado/logueado */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/urgente" element={<Urgente />} />
+          <Route path="/mi-cuenta" element={<MiCuenta />} />
+        </Route>
 
         <Route path="*" element={<h1 className="d-flex justify-content-center align-items-center text-white vh-100">Error: 404</h1>} />
         

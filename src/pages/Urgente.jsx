@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import emailjs from "@emailjs/browser";
+import { apiFetch } from "../api";
 
 export const Urgente = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -8,65 +8,41 @@ export const Urgente = () => {
 
     const [seleccionado, setSeleccionado] = useState(null);
     const [cargando, setCargando] = useState(false);
+    const [error, setError] = useState("");
 
     // ESTADOS DEL FORMULARIO
-    const [nombre, setNombre] = useState(""); // NUEVO CAMPO
     const [fecha, setFecha] = useState("");
     const [hora, setHora] = useState("");
-    const [metodo, setMetodo] = useState("Teléfono");
-    const [contacto, setContacto] = useState("");
 
     const totalEuros = urgente?.reduce((acc, item) => acc + (item.precio || 0), 0) || 0;
 
     const manejarReserva = async (e) => {
         e.preventDefault();
+        setError("");
         setCargando(true);
 
-        const listaServiciosStr = urgente.map(s => `${s.name} (${s.precio}€)`).join(", ");
         const listaServiciosJSON = urgente.map(s => ({ name: s.name, precio: s.precio }));
 
-        // 1. DATOS PARA LA BASE DE DATOS (PYTHON/FLASK)
-        const datosDB = {
-            client: nombre,
-            contact: contacto,
-            date: fecha,
-            time: hora,
-            services: listaServiciosJSON,
-            total: totalEuros
-        };
-
-        // 2. DATOS PARA EMAILJS
-        const datosEmail = {
-            cliente: nombre,
-            servicios: listaServiciosStr,
-            total: totalEuros + "€",
-            fecha_cita: fecha,
-            hora_cita: hora,
-            metodo_confirmacion: metodo,
-            contacto_cliente: contacto
-        };
-
         try {
-            // ENVIAR A POSTGRESQL (BACKEND)
-            const resp = await fetch("http://127.0.0.1", {
+            await apiFetch("/appointment", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(datosDB)
+                token: store.token,
+                body: {
+                    date: fecha,
+                    time: hora,
+                    services: listaServiciosJSON,
+                    total: totalEuros
+                }
             });
-
-            if (!resp.ok) throw new Error("Error guardando en BD");
-
-            // ENVIAR EMAIL (OPCIONAL SI QUIERES AMBOS)
-            await emailjs.send('tu_service_id', 'tu_template_id', datosEmail, 'q96yWv158JqHM5uJY');
 
             alert("¡Cita registrada con éxito! Francisco o Jacinto te contactarán pronto.");
 
             // Limpiar carrito tras éxito
-            // urgente.forEach(item => dispatch({ type: 'toggle_urgente', payload: item }));
+            urgente.forEach(item => dispatch({ type: 'toggle_urgente', payload: item }));
 
         } catch (error) {
             console.error(error);
-            alert("Hubo un problema. Asegúrate de que el Backend esté encendido.");
+            setError(error.message || "Hubo un problema. Asegúrate de que el Backend esté encendido.");
         } finally {
             setCargando(false);
         }
@@ -144,13 +120,6 @@ export const Urgente = () => {
                         </div>
 
                         <form onSubmit={manejarReserva}>
-                            {/* CAMPO NOMBRE */}
-                            <div className="mb-3">
-                                <label className="small fw-bold text-uppercase opacity-75 mb-2">Nombre y Apellido</label>
-                                <input type="text" className="form-control bg-white text-dark border-0 rounded-0 py-2"
-                                    placeholder="Inserta tu nombre y apellido" required value={nombre} onChange={(e) => setNombre(e.target.value)} />
-                            </div>
-
                             <div className="mb-3">
                                 <label className="small fw-bold text-uppercase opacity-75 mb-2">Día de la cita</label>
                                 <input type="date" min={fechaMinima} className="form-control bg-white text-dark border-0 rounded-0 py-2"
@@ -167,21 +136,7 @@ export const Urgente = () => {
                                 </select>
                             </div>
 
-                            <div className="mb-3 text-start">
-                                <label className="small fw-bold text-uppercase opacity-75 mb-2 text-center d-block">¿Cómo confirmamos tu cita?</label>
-                                <div className="d-flex justify-content-center gap-3 mt-1 mb-3">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="contacto" id="radioTel" checked={metodo === "Teléfono"} onChange={() => setMetodo("Teléfono")} />
-                                        <label className="form-check-label small fw-bold" htmlFor="radioTel">Teléfono</label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="contacto" id="radioEmail" checked={metodo === "Email"} onChange={() => setMetodo("Email")} />
-                                        <label className="form-check-label small fw-bold" htmlFor="radioEmail">Email</label>
-                                    </div>
-                                </div>
-                                <input type="text" className="form-control bg-white text-dark border-0 rounded-0 py-2 text-center fw-bold"
-                                    placeholder={`Introduce tu ${metodo}...`} required value={contacto} onChange={(e) => setContacto(e.target.value)} />
-                            </div>
+                            {error && <div className="alert alert-danger small">{error}</div>}
 
                             <button type="submit" className="btn btn-danger w-100 fw-bold py-3 mt-3 rounded-0 shadow-lg text-uppercase" disabled={!urgente?.length || cargando}>
                                 <i className="fa-solid fa-calendar-check me-2"></i>

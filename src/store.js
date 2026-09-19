@@ -10,12 +10,14 @@ export const initialStore = () => {
   }
 
   return {
-    servicios: [],    
-    urgente: [],      
-    vehiculo: null,   
-    citas: [], 
-    cita_programada: { fecha: "", hora: "" },  
-    busqueda: ""
+    servicios: [],
+    urgente: [],
+    vehiculo: null,
+    citas: [],
+    cita_programada: { fecha: "", hora: "" },
+    busqueda: "",
+    usuario: null,
+    token: null
   };
 };
 
@@ -38,16 +40,22 @@ export default function storeReducer(store, action = {}) {
     case 'toggle_urgente':
       const item = action.payload;
       const existe = store.urgente.some(serv => serv.id === item.id);
-      
-      const nuevoEstado = {
+
+      return {
         ...store,
-        urgente: existe 
-          ? store.urgente.filter(serv => serv.id !== item.id) 
+        urgente: existe
+          ? store.urgente.filter(serv => serv.id !== item.id)
           : [...store.urgente, item]
       };
 
-      localStorage.setItem("taller_app_data", JSON.stringify(nuevoEstado));
-      return nuevoEstado;
+    case 'set_usuario':
+      return { ...store, usuario: action.payload.user, token: action.payload.token };
+
+    case 'logout':
+      return { ...store, usuario: null, token: null, urgente: [], citas: [] };
+
+    case 'set_citas':
+      return { ...store, citas: action.payload };
 
     default:
       return store;

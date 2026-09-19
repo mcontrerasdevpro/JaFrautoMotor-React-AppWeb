@@ -11,7 +11,7 @@ export function StoreProvider({ children }) {
     // 2. MAGIA: Cada vez que el store cambie (añadas un favorito o cargues personajes), 
     // lo guardamos automáticamente en el navegador.
     useEffect(() => {
-        localStorage.setItem("starwars_store", JSON.stringify(store));
+        localStorage.setItem("taller_app_data", JSON.stringify(store));
     }, [store]);
 
     return (

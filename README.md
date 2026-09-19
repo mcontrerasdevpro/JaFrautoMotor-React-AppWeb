@@ -1,73 +1,54 @@
-# WebApp Template with React JS
+# JaFrauto Motor
 
+Web del taller JaFrauto Motor: catálogo de servicios, reserva de citas para clientes registrados y panel interno de gestión para el taller.
 
-Used by 4Geeks.com and 4Geeks Academy students, this template helps to bootstrap your first multi-page web applications by integrating with React latest version, vercel deployments and [Vite](https://4geeks.com/lesson/intro-to-vite-module-bundler) for bundling.
+## Stack
 
-### Getting stated:
+- **Frontend**: React + Vite, React Router, Bootstrap. Desplegado en [Vercel](https://vercel.com/).
+- **Backend**: Flask + SQLAlchemy + Flask-Migrate, autenticación con JWT (Flask-JWT-Extended). Desplegado en [Render](https://render.com/).
+- **Base de datos**: PostgreSQL en [Neon](https://neon.tech/).
+- **Email**: confirmación de citas por Flask-Mail (SMTP de Gmail).
 
-> 📦 Make sure you are using at least node version 20.
+## Funcionalidad
 
-1. Install the node package dependencies by typing: `$ npm install`
+- Catálogo de servicios y carrito de reserva (`/servicios`, `/urgente`).
+- Registro/login de clientes; cada cita queda ligada a su cuenta.
+- `/mi-cuenta`: historial de citas del cliente, cancelación y edición de datos de contacto.
+- `/gestion` → `/panel-interno`: acceso solo para cuentas de administrador (`is_admin`), con:
+  - pestaña **Solicitudes**: todas las citas reales, marcar como completada.
+  - pestaña **Clientes**: listado de clientes registrados, su historial y notas internas.
 
-2. Create a .env file by typing `$ cp .env.example .env`
+## Desarrollo en local
 
-3. Start coding! and the vite dev server with live reload by typing: `$ npm run start`
+### Backend (Flask)
 
+1. Crea un entorno virtual e instala dependencias:
+   ```sh
+   python -m venv venv
+   venv\Scripts\pip install -r requirements.txt   # Windows
+   ```
+2. Copia `.env.example` a `.env` y rellena los valores reales (connection string de Neon, `JWT_SECRET_KEY`, y opcionalmente `MAIL_USERNAME`/`MAIL_PASSWORD` para el email de confirmación).
+3. Aplica las migraciones y arranca el servidor:
+   ```sh
+   set FLASK_APP=app.py
+   venv\Scripts\python -m flask db upgrade
+   venv\Scripts\python -m flask run --host 127.0.0.1 --port 3001
+   ```
 
-### Styling
+### Frontend (Vite)
 
-You can update the `./index.css` or create new `.css` files and import them into your current css or js files depending on your needs.
+1. Instala dependencias: `npm install`
+2. Arranca el servidor de desarrollo: `npm run start`
+3. Por defecto apunta al backend en `http://127.0.0.1:3001`. Para apuntar a otro backend, define `VITE_API_URL` en un `.env` de la raíz.
 
-### Components
+## Despliegue
 
-Add more files into your `./src/components` or styles folder as you need them and import them into your current files as needed.
+- **Frontend**: Vercel, auto-deploy desde `master`. Variable de entorno `VITE_API_URL` apuntando a la URL del backend en Render.
+- **Backend**: Render (Web Service, runtime Python 3).
+  - Build Command: `pip install -r requirements.txt && flask db upgrade`
+  - Start Command: `gunicorn app:app --bind 0.0.0.0:$PORT`
+  - Variables de entorno: `DATABASE_URL_POOLED`, `JWT_SECRET_KEY`, `FLASK_APP=app.py`, y opcionalmente `MAIL_USERNAME`/`MAIL_PASSWORD`.
 
-💡Note: There is an example using the Context API inside `pages/demo.js`;
+## Cuentas de administrador
 
-### Pages
-
-Add more files into your `./js/pages` and import them in `./routes.jsx`.
-Each page must match at least one route inside `routes.jsx`
-
-### Centralized Store with useReducer
-
-This template comes with a centralized & general state that's shared with all pages and compoentes, we call it "the store".   
-
-The file `./src/store.js` has a default structure for the store, we encourage you to change it and adapt it to your data needs (for example, if you are doing a `Todo list` you will probably have a array of todos here).
-
-+ Learn [how the useReducer works](https://4geeks.com/lesson/optimize-react-components-usereducer).
-+ Read more about [implementing a global state with Context API](https://4geeks.com/lesson/context-api)
-+ Read more about [react hooks](https://content.breatheco.de/lesson/react-hooks-explained)
-
-The store `Provider` for this context is already set on `./src/main.jsx`. You can access the store from any component using the `useGlobalReducer` hook to get the `store` and `dispatcher`. Check `/views/demo.js` to see a demo. Here is a smaller sample:
-
-```jsx
-import useGlobalReducer from "./src/hooks/useGlobalReducer";
-
-const MyComponentSuper = () => {
-  //here you use the hook to get dispatcher and store
-  import { dispatch, store } = useGlobalReducer();
-
-  return <div>{/* you can use your actions or store inside the html */}</div>
-}
-```
-
-## Publish your website!
-
-1. **Vercel:** The FREE recomended hosting provider is [vercel.com](https://vercel.com/), you can deploy in 1 minutes by typing the following 2 commands:
-
-Login (you need to have an account):
-```sh
-$ npm i vercel -g && vercel login
-```
-Deploy:
-```sh
-$ vercel --prod
-```
-✎ Note: If you don't have an account just go to vercel.com, create a account and come back here.
-
-![Vercel example procedure to deploy](https://github.com/4GeeksAcademy/react-hello-webapp/blob/4b530ba091a981d3916cc6e960e370decaf2e234/docs/deploy.png?raw=true)
-
-## Contributors
-
-This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning) and [CyberSecurity Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/cybersecurity).
+No hay un endpoint público para crear administradores (por seguridad). Para dar de alta uno: la persona se registra normal desde `/registro`, y luego se activa manualmente `is_admin = True` para esa fila en la base de datos.

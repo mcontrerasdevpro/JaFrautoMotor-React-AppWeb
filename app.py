@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
+from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Appointment, Service
 
@@ -31,9 +32,40 @@ if not jwt_secret:
     raise RuntimeError("Falta JWT_SECRET_KEY en el .env")
 app.config['JWT_SECRET_KEY'] = jwt_secret
 
+# CONFIGURACIÓN DE ENVÍO DE EMAILS (Gmail SMTP)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+app.config['MAIL_DEFAULT_SENDER'] = ("JaFrauto Motor", os.getenv("MAIL_USERNAME"))
+
 MIGRATE = Migrate(app, db)
 db.init_app(app)
 JWTManager(app)
+mail = Mail(app)
+
+def enviar_confirmacion_cita(appointment, user):
+    lista_servicios = ", ".join(s.get("name", "") for s in (appointment.services_ordered or []))
+    cuerpo = f"""Hola {user.name},
+
+Tu cita en JaFrauto Motor ha sido registrada con éxito.
+
+Fecha: {appointment.date}
+Hora: {appointment.time}
+Servicios: {lista_servicios}
+Total estimado: {appointment.total_price}€
+
+Francisco o Jacinto te contactarán pronto para confirmar los detalles.
+
+JaFrauto Motor
+"""
+    mensaje = Message(
+        subject="Confirmación de tu cita - JaFrauto Motor",
+        recipients=[user.email],
+        body=cuerpo
+    )
+    mail.send(mensaje)
 
 # --- RUTAS DE LA API ---
 
@@ -144,6 +176,11 @@ def add_appointment():
 
     db.session.add(new_appointment)
     db.session.commit()
+
+    try:
+        enviar_confirmacion_cita(new_appointment, user)
+    except Exception as e:
+        app.logger.warning(f"No se pudo enviar el email de confirmación: {e}")
 
     return jsonify({"msg": "Cita registrada con éxito en el taller"}), 201
 

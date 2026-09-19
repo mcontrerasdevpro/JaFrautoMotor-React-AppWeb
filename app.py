@@ -1,4 +1,5 @@
 import os
+from functools import wraps
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
@@ -66,6 +67,16 @@ JaFrauto Motor
         body=cuerpo
     )
     mail.send(mensaje)
+
+def admin_required(fn):
+    @wraps(fn)
+    @jwt_required()
+    def wrapper(*args, **kwargs):
+        user = User.query.get(int(get_jwt_identity()))
+        if not user or not user.is_admin:
+            return jsonify({"msg": "Acceso solo para administradores"}), 403
+        return fn(*args, **kwargs)
+    return wrapper
 
 # --- RUTAS DE LA API ---
 
@@ -213,6 +224,7 @@ def cancel_appointment(appointment_id):
 
 # RUTA PARA QUE FRANCISCO Y JACINTO VEAN TODAS LAS CITAS
 @app.route('/appointments', methods=['GET'])
+@admin_required
 def get_all_appointments():
     appointments = Appointment.query.all()
     all_appointments = list(map(lambda x: x.serialize(), appointments))
@@ -220,6 +232,7 @@ def get_all_appointments():
 
 # RUTA PARA QUE EL PANEL DE ADMIN ACTUALICE EL ESTADO DE UNA CITA
 @app.route('/appointment/<int:appointment_id>/status', methods=['PATCH'])
+@admin_required
 def update_appointment_status(appointment_id):
     appointment = Appointment.query.get(appointment_id)
     if not appointment:
@@ -234,6 +247,32 @@ def update_appointment_status(appointment_id):
     db.session.commit()
 
     return jsonify(appointment.serialize()), 200
+
+# --- CLIENTES (CRM) ---
+
+# RUTA PARA QUE EL ADMIN VEA TODOS LOS CLIENTES REGISTRADOS
+@app.route('/clients', methods=['GET'])
+@admin_required
+def get_all_clients():
+    clients = User.query.all()
+    return jsonify([c.serialize_admin() for c in clients]), 200
+
+# RUTA PARA QUE EL ADMIN GUARDE UNA NOTA INTERNA SOBRE UN CLIENTE
+@app.route('/clients/<int:user_id>/notes', methods=['PATCH'])
+@admin_required
+def update_client_notes(user_id):
+    client = User.query.get(user_id)
+    if not client:
+        return jsonify({"msg": "Cliente no encontrado"}), 404
+
+    body = request.get_json()
+    if not body:
+        return jsonify({"msg": "No hay datos en la petición"}), 400
+
+    client.notes = body.get("notes", "")
+    db.session.commit()
+
+    return jsonify(client.serialize_admin()), 200
 
 if __name__ == '__main__':
        app.run(host='127.0.0.1', port=3001, debug=True)

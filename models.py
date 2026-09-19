@@ -11,6 +11,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
     is_active = db.Column(db.Boolean(), default=True)
+    is_admin = db.Column(db.Boolean(), nullable=False, default=False)
+    notes = db.Column(db.Text, nullable=True)
     appointments = db.relationship('Appointment', backref='user', lazy=True)
 
     def serialize(self):
@@ -18,8 +20,12 @@ class User(db.Model):
             "id": self.id,
             "name": self.name,
             "email": self.email,
-            "phone": self.phone
+            "phone": self.phone,
+            "is_admin": self.is_admin
         }
+
+    def serialize_admin(self):
+        return {**self.serialize(), "notes": self.notes}
 
 class Service(db.Model):
     __tablename__ = 'service'
@@ -43,6 +49,7 @@ class Appointment(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "user_id": self.user_id,
             "client": self.client_name,
             "contact": self.client_contact,
             "date": self.date,

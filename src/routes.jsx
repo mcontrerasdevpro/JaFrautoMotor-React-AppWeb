@@ -22,6 +22,7 @@ import { Login } from "./pages/Login";
 import { Registro } from "./pages/Registro";
 import { MiCuenta } from "./pages/MiCuenta";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AdminRoute } from "./components/AdminRoute";
 
 
 export const router = createBrowserRouter(
@@ -47,13 +48,17 @@ export const router = createBrowserRouter(
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/gestion" element={<AccesoGestion />} />
-        <Route path="/panel-interno" element={<PanelInterno />} />
         <Route path="/cookies" element={<Cookies />} />
 
         {/* Rutas que requieren estar registrado/logueado */}
         <Route element={<ProtectedRoute />}>
           <Route path="/urgente" element={<Urgente />} />
           <Route path="/mi-cuenta" element={<MiCuenta />} />
+        </Route>
+
+        {/* Rutas que requieren cuenta de administrador */}
+        <Route element={<AdminRoute />}>
+          <Route path="/panel-interno" element={<PanelInterno />} />
         </Route>
 
         <Route path="*" element={<h1 className="d-flex justify-content-center align-items-center text-white vh-100">Error: 404</h1>} />

@@ -1,18 +1,22 @@
-import urllib.parse 
 import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_cors import CORS
 from models import db, User, Appointment, Service
 
+load_dotenv()
+
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 app.url_map.strict_slashes = False
 
-# CONFIGURACIÓN DE LA BASE DE DATOS (PostgreSQL)
-# Si estás en local, usa una URL de prueba, en producción usaremos la de Render/Railway
-params = urllib.parse.quote_plus("26035618")
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+pg8000://postgres:26035618@127.0.0.1:5432/jafrautomotor"
+# CONFIGURACIÓN DE LA BASE DE DATOS (PostgreSQL en Neon)
+# La URL se lee del .env (DATABASE_URL_POOLED).
+database_url = os.getenv("DATABASE_URL_POOLED") or os.getenv("DATABASE_URL")
+if not database_url:
+    raise RuntimeError("Falta DATABASE_URL_POOLED (o DATABASE_URL) en el .env")
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 MIGRATE = Migrate(app, db)

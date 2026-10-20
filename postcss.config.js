@@ -1,3 +1,4 @@
+/* eslint-env node */
 import { purgeCSSPlugin } from "@fullhuman/postcss-purgecss";
 
 // En el build de producción quitamos de Bootstrap las clases que la web no usa

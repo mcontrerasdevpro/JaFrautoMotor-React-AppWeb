@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { TALLER } from "../config";
+import { MapaGoogle } from "./MapaGoogle";
+import { abrirPreferenciasCookies } from "../hooks/useConsentimiento";
 
 export const Footer = () => (
     <footer className="bg-dark text-white pt-5 pb-2 mt-auto" style={{ borderTop: "4px solid #fa0606" }}>
@@ -67,15 +69,7 @@ export const Footer = () => (
                         {/* Mapa */}
                         <div className="col-sm-6">
                             <div className="shadow-sm border border-secondary overflow-hidden mx-auto" style={{ borderRadius: "8px", maxWidth: "300px" }}>
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.864032769776!2d-3.7903449!3d37.7932261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6dd785dd31629f%3A0xdb2725b0e85794e2!2sJafrautomotor!5e0!3m2!1ses!2ses!4v1773799069849!5m2!1ses!2ses"
-                                    width="100%"
-                                    height="100%"
-                                    style={{ border: 0, display: "block", minHeight: "110px" }}
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade">
-                                </iframe>
+                                <MapaGoogle oscuro altoMinimo="150px" />
                             </div>
                         </div>
                     </div>
@@ -94,6 +88,7 @@ export const Footer = () => (
                         <Link to="/avisoLegal" className="text-secondary text-decoration-none small mx-2 hover-red">Aviso Legal</Link>
                         <Link to="/politicaPrivacidad" className="text-secondary text-decoration-none small mx-2 hover-red">Privacidad</Link>
                         <Link to="/cookies" className="text-secondary text-decoration-none small mx-2 hover-red">Cookies</Link>
+                        <button type="button" onClick={abrirPreferenciasCookies} className="btn btn-link p-0 text-secondary text-decoration-none small mx-2 hover-red align-baseline">Configurar cookies</button>
                     </div>
                 </div>
             </div>

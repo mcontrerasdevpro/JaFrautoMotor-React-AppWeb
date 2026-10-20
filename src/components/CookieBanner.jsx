@@ -1,31 +1,25 @@
-import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import useConsentimiento, { guardarConsentimiento } from "../hooks/useConsentimiento";
 
 export const CookieBanner = () => {
-    const [visible, setVisible] = useState(false);
+    const consentimiento = useConsentimiento();
 
-    useEffect(() => {
-        const consentimiento = localStorage.getItem("cookies_aceptadas");
-        if (!consentimiento) {
-            setVisible(true);
-        }
-    }, []);
-
-    const aceptarCookies = () => {
-        localStorage.setItem("cookies_aceptadas", "true");
-        setVisible(false);
-    };
-
-    if (!visible) return null;
+    if (consentimiento) return null;
 
     return (
-        <div className="fixed-bottom bg-dark text-white p-3 shadow-lg border-top border-danger" style={{ zIndex: 9999 }}>
+        <div className="fixed-bottom bg-dark text-white p-3 shadow-lg border-top border-danger" style={{ zIndex: 9999 }}
+            role="dialog" aria-live="polite" aria-label="Aviso de cookies">
             <div className="container d-md-flex align-items-center justify-content-between">
-                <p className="small mb-2 mb-md-0 opacity-75 me-3">
-                    Utilizamos cookies propias para mejorar tu experiencia y ofrecerte nuestros servicios de taller. 
-                    Al continuar navegando, aceptas nuestra <a href="/cookies" className="text-danger text-decoration-none fw-bold">Política de Cookies</a>.
+                <p className="small mb-2 mb-md-0 me-3">
+                    Usamos almacenamiento técnico imprescindible para que la web funcione (sesión y servicios elegidos).
+                    Si aceptas, también cargamos Google Maps, que instala cookies de Google.
+                    Más información en la <Link to="/cookies" className="text-danger fw-bold">política de cookies</Link>.
                 </p>
-                <div className="d-flex gap-2">
-                    <button onClick={aceptarCookies} className="btn btn-danger btn-sm fw-bold rounded-0 px-4">
+                <div className="d-flex gap-2 flex-shrink-0">
+                    <button onClick={() => guardarConsentimiento("rechazadas")} className="btn btn-outline-light btn-sm fw-bold rounded-0 px-4">
+                        RECHAZAR
+                    </button>
+                    <button onClick={() => guardarConsentimiento("aceptadas")} className="btn btn-danger btn-sm fw-bold rounded-0 px-4">
                         ACEPTAR
                     </button>
                 </div>

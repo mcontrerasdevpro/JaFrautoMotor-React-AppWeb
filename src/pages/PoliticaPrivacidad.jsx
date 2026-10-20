@@ -4,7 +4,7 @@ export const PoliticaPrivacidad = () => {
             <div className="row justify-content-center">
                 <div className="col-lg-10">
                     <h1 className="fw-bold border-bottom border-danger pb-3 mb-4 text-uppercase">
-                        Aviso <span className="text-danger">Legal</span>
+                        Política de <span className="text-danger">Privacidad</span>
                     </h1>
 
                     <section className="mb-4">
@@ -89,7 +89,30 @@ export const PoliticaPrivacidad = () => {
                     
                     </section>
 
-             
+                    <section className="mb-4">
+                        <p>
+                            <strong>4. DATOS QUE SE RECOGEN EN ESTA WEB</strong>
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>Formularios de presupuesto y de contacto:</strong> nombre, teléfono, email (opcional),
+                                vehículo, matrícula (opcional) y el mensaje. Se usan solo para responder a la solicitud.
+                            </li>
+                            <li>
+                                <strong>Cuenta de cliente y citas:</strong> nombre, email, teléfono, contraseña cifrada y las citas
+                                solicitadas, para gestionar las reservas y avisarte por email.
+                            </li>
+                            <li>
+                                Guardamos la fecha en la que aceptas esta política. Los datos de solicitudes que no lleguen a ser
+                                clientes se suprimen cuando dejan de ser necesarios para atenderlas.
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>Proveedores que tratan los datos por cuenta del RESPONSABLE (encargados del tratamiento):</strong>{" "}
+                            alojamiento de la web (Vercel), servidor de la aplicación (Render), base de datos (Neon) y envío de
+                            emails (Google). Solo acceden a los datos para prestar su servicio técnico.
+                        </p>
+                    </section>
                 </div>
             </div>
         </div>

@@ -52,14 +52,24 @@ class Service(db.Model):
 class Appointment(db.Model):
     __tablename__ = 'appointment'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # Null en las citas de invitado (reservadas sin cuenta)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     client_name = db.Column(db.String(100), nullable=False)
     client_contact = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.String(50), nullable=False) # Fecha ISO AAAA-MM-DD (validada en la API)
+    client_email = db.Column(db.String(120), nullable=True)
+    date = db.Column(db.String(50), nullable=False, index=True) # Fecha ISO AAAA-MM-DD (validada en la API)
     time = db.Column(db.String(20), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), default="Pendiente")
     services_ordered = db.Column(db.JSON, nullable=False)
+    vehicle = db.Column(db.String(100), nullable=True)
+    plate = db.Column(db.String(20), nullable=True)
+    symptom = db.Column(db.Text, nullable=True)
+    source = db.Column(db.String(20), nullable=False, default="web")  # web | asistente | panel
+    # Enlace privado para que el cliente consulte, cambie o cancele sin cuenta
+    manage_token = db.Column(db.String(64), unique=True, nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), nullable=True, default=ahora_utc)
+    reminder_sent_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
     def serialize(self):
         return {
@@ -67,12 +77,47 @@ class Appointment(db.Model):
             "user_id": self.user_id,
             "client": self.client_name,
             "contact": self.client_contact,
+            "email": self.client_email,
             "date": self.date,
             "time": self.time,
             "services": self.services_ordered,
             "total": self.total_price,
-            "status": self.status
+            "status": self.status,
+            "vehicle": self.vehicle,
+            "plate": self.plate,
+            "symptom": self.symptom,
+            "source": self.source,
+            "created_at": self.created_at.isoformat() if self.created_at else None
         }
+
+    def serialize_publico(self):
+        """Lo que ve quien abre el enlace de gestión: sin ids internos ni notas."""
+        return {
+            "date": self.date,
+            "time": self.time,
+            "status": self.status,
+            "client": self.client_name,
+            "services": [s.get("name") for s in (self.services_ordered or [])],
+            "total": self.total_price,
+            "vehicle": self.vehicle,
+            "plate": self.plate
+        }
+
+class BlockedDay(db.Model):
+    """Día en que no se aceptan citas (festivo, vacaciones...). Lo gestiona el taller desde el panel."""
+    __tablename__ = 'blocked_day'
+    id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.Date, unique=True, nullable=False)
+    reason = db.Column(db.String(120), nullable=True)
+
+    def serialize(self):
+        return {"id": self.id, "date": self.day.isoformat(), "reason": self.reason}
+
+class Setting(db.Model):
+    """Ajustes sencillos clave/valor (capacidad por franja, contador de uso de IA...)."""
+    __tablename__ = 'setting'
+    key = db.Column(db.String(60), primary_key=True)
+    value = db.Column(db.String(200), nullable=False)
 
 class Lead(db.Model):
     """Solicitud de presupuesto o mensaje de contacto enviado desde la web."""

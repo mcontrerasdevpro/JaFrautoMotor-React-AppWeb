@@ -1,6 +1,6 @@
 // Datos de contacto del taller: cada número se cambia solo aquí.
 
-const WHATSAPP_NUMERO = "34659603058";
+const WHATSAPP_NUMERO = "34953121814";
 const WHATSAPP_MENSAJE = "Hola, os escribo desde la web de JaFrauto Motor. Quería pedir cita / información sobre mi coche.";
 
 export const TALLER = {

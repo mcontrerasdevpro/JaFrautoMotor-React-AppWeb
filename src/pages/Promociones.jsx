@@ -59,7 +59,7 @@ export const Promociones = () => {
     };
 
     return (
-        <div className="container mt-1 pt-4">
+        <div className="container py-4 py-lg-5">
             <div className="text-center mb-5">
                 <h1 className="fw-bold display-4 text-uppercase">Ofertas <span className="text-danger">Especiales</span></h1>
                 <p className="text-secondary lead">Descuentos exclusivos para que tu coche esté siempre a punto</p>

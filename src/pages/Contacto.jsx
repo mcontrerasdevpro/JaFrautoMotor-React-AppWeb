@@ -4,7 +4,7 @@ import { FormularioContacto } from "../components/FormularioContacto";
 
 export const Contacto = () => {
     return (
-        <div className="container mt-1 pt-4 text-dark">
+        <div className="container py-4 py-lg-5 text-dark">
             {/* ENCABEZADO */}
             <div className="text-center text-md-start mb-4">
                 <h1 className="fw-bold display-4 mb-0 text-uppercase">

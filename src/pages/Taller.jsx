@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 
 export const Taller = () => {
     return (
-        <div className="container mt-1 pt-4 text-dark">
+        <div className="container py-4 py-lg-5 text-dark">
             {/* SECCIÓN 1: INTRODUCCIÓN CON IMAGEN */}
-            <div className="row align-items-center g-5 mb-5">
+            <div className="row align-items-center g-4 g-lg-5 mb-5">
                 {/* COLUMNA DE TEXTO */}
                 <div className="col-lg-6">
-                    <div className="d-flex align-items-center mb-3">
+                    <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
                         <h1 className="fw-bold display-4 mb-0 text-uppercase">
                             Sobre <span className="text-danger">Nosotros</span>
                         </h1>
                         {/* EL DISTINTIVO AL LADO DEL TÍTULO */}
-                        <div className="bg-dark text-white p-3 shadow mt-3 mt-md-0 d-inline-block border-start border-4 border-danger"
+                        <div className="bg-dark text-white p-3 shadow d-inline-block border-start border-4 border-danger ms-2"
                             style={{ minWidth: "160px", transform: "skewX(-10deg)" }}> {/* Inclinación estilo Racing */}
                             <div style={{ transform: "skewX(10deg)" }}> {/* Revertimos inclinación en el texto para que se lea recto */}
                                 <h4 className="fw-bold mb-0 text-danger text-center">+15 AÑOS</h4>

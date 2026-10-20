@@ -59,7 +59,7 @@ export const MiCuenta = () => {
     };
 
     return (
-        <div className="container mt-5 pt-5 text-dark" style={{ minHeight: "85vh" }}>
+        <div className="container py-4 py-lg-5 text-dark" style={{ minHeight: "85vh" }}>
             <div className="d-flex justify-content-between align-items-center mb-4 border-bottom border-danger pb-3">
                 <h1 className="fw-bold m-0 text-uppercase">MI <span className="text-danger">CUENTA</span></h1>
                 <button className="btn btn-outline-dark btn-sm fw-bold" onClick={cerrarSesion}>

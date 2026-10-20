@@ -1,6 +1,6 @@
 export const PoliticaPrivacidad = () => {
     return (
-        <div className="container mt-1 pt-5 text-dark pb-5">
+        <div className="container py-4 py-lg-5 text-dark">
             <div className="row justify-content-center">
                 <div className="col-lg-10">
                     <h1 className="fw-bold border-bottom border-danger pb-3 mb-4 text-uppercase">

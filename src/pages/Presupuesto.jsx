@@ -36,7 +36,7 @@ export const Presupuesto = () => {
 
     if (enviado) {
         return (
-            <div className="container mt-5 pt-5 text-center text-dark" style={{ minHeight: "70vh" }}>
+            <div className="container py-4 py-lg-5 text-center text-dark" style={{ minHeight: "70vh" }}>
                 <div className="card border-0 shadow-lg p-5 bg-white">
                     <i className="fa-solid fa-paper-plane fa-4x text-danger mb-4"></i>
                     <h2 className="fw-bold">¡SOLICITUD ENVIADA!</h2>
@@ -49,8 +49,8 @@ export const Presupuesto = () => {
     }
 
     return (
-        <div className="container mt-5 pt-4 text-dark">
-            <div className="row g-5">
+        <div className="container py-4 py-lg-5 text-dark">
+            <div className="row g-4 g-lg-5">
                 {/* Columna de Texto Informativo */}
                 <div className="col-lg-5">
                     <h1 className="fw-bold display-4 text-uppercase">Solicita tu <span className="text-danger">Presupuesto</span></h1>

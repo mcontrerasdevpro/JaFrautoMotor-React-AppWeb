@@ -47,10 +47,23 @@ export const Servicios = () => {
     };
 
      return (
-        <div className="container mt-1 pt-4 text-dark">
+        <div className="container py-4 py-lg-5 text-dark">
             <div className="text-center mb-5">
                 <h1 className="fw-bold display-4">NUESTROS <span className="text-danger">SERVICIOS</span></h1>
                 <p className="text-muted lead">Selecciona los mantenimientos que necesites para obtener tu presupuesto.</p>
+                <div className="position-relative mx-auto mt-4" style={{ maxWidth: "420px" }}>
+                    <label htmlFor="buscar-servicio" className="visually-hidden">Buscar servicio</label>
+                    <input
+                        id="buscar-servicio"
+                        type="text"
+                        inputMode="search"
+                        className="form-control border-danger shadow-none bg-light rounded-0 pe-5"
+                        placeholder="Buscar servicio (frenos, aceite, ITV...)"
+                        value={busqueda || ""}
+                        onChange={(e) => dispatch({ type: "set_busqueda", payload: e.target.value })}
+                    />
+                    <i className="fa-solid fa-magnifying-glass position-absolute end-0 top-50 translate-middle-y me-3 text-danger opacity-50" aria-hidden="true"></i>
+                </div>
             </div>
 
             {error && store.servicios.length === 0 && (

@@ -1,12 +1,12 @@
-#root {
-  padding-top: 60px; /* Ajusta este número según la altura de tu Navbar */
+/* Logo del navbar: se adapta para que logo y hamburguesa quepan en una línea a 360 px */
+.logo-jafrauto {
+  font-size: clamp(1.3rem, 5.5vw, 1.75rem);
+  white-space: nowrap;
 }
 
-@media (max-width: 1199px) {
-  /* Si el menú está abierto, añadimos un margen extra al contenedor principal */
-  .navbar-collapse.show ~ .galaxy-container,
-  .navbar-collapse.show ~ div {
-    margin-top: 20px;
+@media (min-width: 1200px) {
+  .logo-jafrauto {
+    font-size: 1.6rem;
   }
 }
 
@@ -25,4 +25,3 @@
 .pulse-urgente {
   animation: pulse-red 2s infinite;
 }
-

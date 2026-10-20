@@ -1,7 +1,7 @@
 import { abrirPreferenciasCookies } from "../hooks/useConsentimiento";
 
 export const Cookies = () => (
-    <div className="container mt-1 pt-5 text-dark" style={{ minHeight: "80vh" }}>
+    <div className="container py-4 py-lg-5 text-dark" style={{ minHeight: "80vh" }}>
         <h1 className="fw-bold border-bottom border-danger pb-3 mb-4 text-uppercase">
             Política de <span className="text-danger">Cookies</span>
         </h1>

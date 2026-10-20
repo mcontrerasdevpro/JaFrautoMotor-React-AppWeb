@@ -52,7 +52,7 @@ export const Urgente = () => {
 
     if (seleccionado) {
         return (
-            <div className="container mt-5 pt-5 text-center text-white">
+            <div className="container py-4 py-lg-5 text-center text-white">
                 <div className="p-5 bg-dark border border-danger rounded shadow-lg">
                     <h2 className="text-danger fw-bold">DETALLES: {seleccionado.name}</h2>
                     <p className="mt-3 lead">{seleccionado.description}</p>
@@ -77,7 +77,7 @@ export const Urgente = () => {
 
     if (citaConfirmada) {
         return (
-            <div className="container mt-5 pt-5 text-dark text-center" style={{ minHeight: "70vh" }}>
+            <div className="container py-4 py-lg-5 text-dark text-center" style={{ minHeight: "70vh" }}>
                 <div className="card border-0 shadow-lg p-5 bg-white mx-auto" style={{ maxWidth: "640px" }}>
                     <i className="fa-solid fa-calendar-check fa-4x text-danger mb-4"></i>
                     <h1 className="h2 fw-bold">¡CITA REGISTRADA!</h1>
@@ -92,7 +92,7 @@ export const Urgente = () => {
     }
 
     return (
-        <div className="container mt-5 pt-5 text-dark">
+        <div className="container py-4 py-lg-5 text-dark">
             <div className="bg-danger p-4 rounded-0 mb-5 shadow-lg text-center text-white">
                 <h1 className="fw-bold mb-2">🚨 ASISTENCIA MECÁNICA INMEDIATA</h1>
                 <p className="mb-0 opacity-75 text-uppercase small fw-bold" style={{ letterSpacing: '2px' }}>Llámanos ahora para grúa o avería grave</p>
@@ -101,7 +101,7 @@ export const Urgente = () => {
                 </a>
             </div>
 
-            <div className="row g-5">
+            <div className="row g-4 g-lg-5">
                 <div className="col-lg-7">
                     <h2 className="fw-bold mb-4 border-start border-4 border-danger ps-3 text-uppercase">
                         Mi Reserva de <span className="text-danger">Reparación</span> ({urgente?.length || 0})

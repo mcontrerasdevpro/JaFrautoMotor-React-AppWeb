@@ -35,7 +35,7 @@ export const Registro = () => {
     };
 
     return (
-        <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-dark text-white py-5" style={{ marginTop: "-100px", paddingTop: "140px" }}>
+        <div className="container-fluid d-flex align-items-center justify-content-center bg-dark text-white py-5 px-3" style={{ minHeight: "75vh" }}>
             <div className="card bg-black border-danger p-4 shadow-lg text-white" style={{ width: "100%", maxWidth: "380px" }}>
                 <div className="text-center mb-4">
                     <h1 className="h2 fw-bold">CREAR <span className="text-danger">CUENTA</span></h1>

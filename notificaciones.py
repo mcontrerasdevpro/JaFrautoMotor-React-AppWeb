@@ -7,6 +7,8 @@ log y la reserva sigue adelante.
   Resend; necesita RESEND_API_KEY y un remitente de dominio verificado en EMAIL_FROM).
 - N8N_WEBHOOK_URL + N8N_WEBHOOK_SECRET: cada evento de cita se envía firmado con
   HMAC-SHA256 en la cabecera X-JaFrauto-Signature ("sha256=<hex>").
+- N8N_WEBHOOK_TOKEN (opcional): se envía en X-JaFrauto-Token para que el nodo
+  Webhook de n8n lo compruebe con una credencial "Header Auth".
 """
 import hashlib
 import hmac
@@ -157,12 +159,9 @@ def firmar(cuerpo_bytes, secreto):
     return "sha256=" + hmac.new(secreto.encode(), cuerpo_bytes, hashlib.sha256).hexdigest()
 
 
-def _post_webhook(url, cuerpo, firma, logger):
+def _post_webhook(url, cuerpo, cabeceras, logger):
     try:
-        peticion = urllib.request.Request(
-            url, data=cuerpo, method="POST",
-            headers={"Content-Type": "application/json", "X-JaFrauto-Signature": firma}
-        )
+        peticion = urllib.request.Request(url, data=cuerpo, method="POST", headers=cabeceras)
         with urllib.request.urlopen(peticion, timeout=8):
             pass
     except Exception as e:
@@ -182,9 +181,12 @@ def emitir_evento(evento, appointment):
         "cita": datos_cita(appointment),
         "taller": {"nombre": "JaFrauto Motor", "telefono": TELEFONO_TALLER}
     }, ensure_ascii=False).encode()
+    cabeceras = {"Content-Type": "application/json", "X-JaFrauto-Signature": firmar(cuerpo, secreto)}
+    if os.getenv("N8N_WEBHOOK_TOKEN"):
+        cabeceras["X-JaFrauto-Token"] = os.getenv("N8N_WEBHOOK_TOKEN")
     hilo = threading.Thread(
         target=_post_webhook,
-        args=(url, cuerpo, firmar(cuerpo, secreto), current_app.logger),
+        args=(url, cuerpo, cabeceras, current_app.logger),
         daemon=True
     )
     hilo.start()

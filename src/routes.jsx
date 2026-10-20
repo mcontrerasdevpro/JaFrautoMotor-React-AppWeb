@@ -1,6 +1,7 @@
 import {
     createBrowserRouter,
     createRoutesFromElements,
+    Navigate,
     Route,
 } from "react-router-dom";
 import { Layout } from "./pages/Layout";
@@ -12,7 +13,8 @@ import { Servicios } from "./pages/Servicios";
 import { Contacto } from "./pages/Contacto";
 import { Taller } from "./pages/Taller";
 import { Promociones } from "./pages/Promociones";
-import { Urgente } from "./pages/Urgente";
+import { Reservar } from "./pages/Reservar";
+import { GestionCita } from "./pages/GestionCita";
 import { AccesoGestion } from "./pages/AccesoGestion";
 import { PanelInterno } from "./pages/PanelInterno";
 import { Cookies } from "./pages/Cookies";
@@ -40,10 +42,13 @@ export const router = createBrowserRouter(
         <Route path="/registro" element={<Registro />} />
         <Route path="/gestion" element={<AccesoGestion />} />
         <Route path="/cookies" element={<Cookies />} />
+        <Route path="/reservar" element={<Reservar />} />
+        <Route path="/cita/:token" element={<GestionCita />} />
+        {/* Enlace antiguo de la reserva (antes pedía cuenta) */}
+        <Route path="/urgente" element={<Navigate to="/reservar" replace />} />
 
         {/* Rutas que requieren estar registrado/logueado */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/urgente" element={<Urgente />} />
           <Route path="/mi-cuenta" element={<MiCuenta />} />
         </Route>
 

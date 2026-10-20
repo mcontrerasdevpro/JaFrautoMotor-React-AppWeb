@@ -9,6 +9,7 @@ export const Promociones = () => {
     const promos = [
         {
             id: "p1",
+            servicioId: 6, // Revisión Pre-ITV del catálogo
             titulo: "PACK PRE-ITV",
             antes: "60€",
             ahora: "39€",
@@ -20,6 +21,7 @@ export const Promociones = () => {
         },
         {
             id: "p2",
+            servicioId: 5, // Aire Acondicionado
             titulo: "CARGA AIRE ACONDICIONADO",
             antes: "80€",
             ahora: "60€",
@@ -27,10 +29,11 @@ export const Promociones = () => {
             descripcion: "Carga de gas R134a + revisión de fugas + desinfección de conductos con ozono.",
             valido: "Especial Verano",
             color: "dark",
-            image: "aireacondicionado.jpg" // Imagen de aire acondicionado
+            image: "/aireacondicionado.jpg" // Imagen de aire acondicionado
         },
         {
             id: "p3",
+            servicioId: 1, // Cambio de Aceite
             titulo: "CAMBIO ACEITE Y FILTRO",
             antes: "110€",
             ahora: "85€",
@@ -38,24 +41,27 @@ export const Promociones = () => {
             descripcion: "Aceite sintético 5W30 (hasta 5L) + Filtro de aceite + Revisión de niveles gratuita.",
             valido: "Clientes Web",
             color: "danger",
-            image: "cambioaceite.jpg" // Imagen de cambio de aceite
+            image: "/cambioaceite.jpg" // Imagen de cambio de aceite
         }
     ];
 
+    // La promoción se reserva como su servicio del catálogo (la API solo acepta esos ids)
+    // y se anota en la cita para que el taller aplique el precio de la oferta
     const manejarReserva = (promo) => {
-        const estaEnCarrito = urgente.some(item => item.id === promo.id);
+        const estaEnCarrito = urgente.some(item => item.id === promo.servicioId);
         if (!estaEnCarrito) {
             dispatch({
                 type: 'toggle_urgente',
                 payload: {
-                    id: promo.id,
+                    id: promo.servicioId,
                     name: promo.titulo,
                     precio: promo.precioNum,
-                    image: promo.image
+                    image: promo.image,
+                    promo: promo.titulo
                 }
             });
         }
-        navigate("/urgente");
+        navigate("/reservar");
     };
 
     return (
@@ -68,7 +74,7 @@ export const Promociones = () => {
 
             <div className="row g-4 mb-5">
                 {promos.map((p) => {
-                    const estaEnCarrito = urgente.some(item => item.id === p.id);
+                    const estaEnCarrito = urgente.some(item => item.id === p.servicioId);
                     
                     return (
                         <div className="col-md-4" key={p.id}>
@@ -91,7 +97,7 @@ export const Promociones = () => {
                                 </div>
 
                                 <div className="card-body p-4 text-center">
-                                    <h4 className={`fw-bold text-uppercase mb-3`}>{p.titulo}</h4>
+                                    <h2 className="h4 fw-bold text-uppercase mb-3">{p.titulo}</h2>
                                     <div className="mb-3 d-flex align-items-center justify-content-center gap-2">
                                         <span className="text-muted text-decoration-line-through fs-5">{p.antes}</span>
                                         <span className={`display-6 fw-bold text-${p.color}`}>{p.ahora}</span>

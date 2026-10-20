@@ -26,7 +26,7 @@ export const Registro = () => {
                 body: { name, email, phone, password, acepta_privacidad: aceptaPrivacidad }
             });
             dispatch({ type: "set_usuario", payload: data });
-            navigate("/urgente");
+            navigate("/mi-cuenta");
         } catch (err) {
             setError(err.message);
         } finally {

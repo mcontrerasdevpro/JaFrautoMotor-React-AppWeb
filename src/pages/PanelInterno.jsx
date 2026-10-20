@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
+import { PestanaAgenda } from "../components/panel/PestanaAgenda";
 
 const COLOR_ESTADO = {
     Pendiente: "bg-warning text-dark",
@@ -245,6 +246,12 @@ export const PanelInterno = () => {
                         <i className="fa-solid fa-file-invoice me-2"></i>PRESUPUESTOS Y CONTACTO
                     </button>
                 </li>
+                <li className="nav-item">
+                    <button className={`nav-link fw-bold ${tab === "agenda" ? "active text-danger" : "text-dark"}`}
+                        onClick={() => setTab("agenda")}>
+                        <i className="fa-solid fa-calendar-days me-2"></i>AGENDA
+                    </button>
+                </li>
             </ul>
 
             {tab === "solicitudes" && (
@@ -255,6 +262,7 @@ export const PanelInterno = () => {
                                 <thead className="table-light text-uppercase small fw-bold">
                                     <tr>
                                         <th className="ps-4 py-3">Cliente</th>
+                                        <th>Vehículo</th>
                                         <th>Servicios</th>
                                         <th>Fecha</th>
                                         <th>Importe</th>
@@ -265,11 +273,11 @@ export const PanelInterno = () => {
                                 <tbody>
                                     {cargando ? (
                                         <tr>
-                                            <td colSpan="6" className="text-center py-5 text-muted">Cargando...</td>
+                                            <td colSpan="7" className="text-center py-5 text-muted">Cargando...</td>
                                         </tr>
                                     ) : citas.length === 0 ? (
                                         <tr>
-                                            <td colSpan="6" className="text-center py-5 text-muted italic">
+                                            <td colSpan="7" className="text-center py-5 text-muted italic">
                                                 No hay citas pendientes de procesar.
                                             </td>
                                         </tr>
@@ -277,11 +285,20 @@ export const PanelInterno = () => {
                                         citas.map((cita) => (
                                             <tr key={cita.id}>
                                                 <td className="ps-4">
-                                                    <div className="fw-bold">{cita.client}</div>
-                                                    <small className="text-muted">{cita.contact} · Ref: {cita.id}</small>
+                                                    <div className="fw-bold">
+                                                        {cita.client}
+                                                        {!cita.user_id && <span className="badge bg-light text-dark border ms-2">Invitado</span>}
+                                                    </div>
+                                                    <a href={`tel:${cita.contact}`} className="small text-decoration-none">{cita.contact}</a>
+                                                    <small className="text-muted"> · Ref: {cita.id}</small>
                                                 </td>
                                                 <td className="small">
+                                                    {cita.vehicle || "-"}
+                                                    {cita.plate && <div className="text-muted">{cita.plate}</div>}
+                                                </td>
+                                                <td className="small" style={{ minWidth: "180px" }}>
                                                     {(cita.services || []).map(s => s.name).join(", ")}
+                                                    {cita.symptom && <div className="text-muted fst-italic" style={{ whiteSpace: "pre-line" }}>{cita.symptom}</div>}
                                                 </td>
                                                 <td className="small">{cita.date} {cita.time}</td>
                                                 <td>
@@ -307,6 +324,15 @@ export const PanelInterno = () => {
                                                             title="Completar y archivar"
                                                         >
                                                             <i className="fa-solid fa-check-double me-1"></i> ATENDIDA
+                                                        </button>
+                                                    )}
+                                                    {(cita.status === "Pendiente" || cita.status === "Confirmada") && (
+                                                        <button
+                                                            className="btn btn-sm btn-outline-secondary border-0"
+                                                            onClick={() => window.confirm(`¿Cancelar la cita de ${cita.client}?`) && cambiarEstadoCita(cita.id, "Cancelada")}
+                                                            title="Cancelar la cita"
+                                                        >
+                                                            <i className="fa-solid fa-xmark me-1"></i> CANCELAR
                                                         </button>
                                                     )}
                                                 </td>
@@ -432,6 +458,8 @@ export const PanelInterno = () => {
                     </div>
                 </div>
             )}
+
+            {tab === "agenda" && <PestanaAgenda token={store.token} />}
         </div>
     );
 };

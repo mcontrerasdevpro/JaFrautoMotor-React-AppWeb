@@ -59,7 +59,7 @@ export const Navbar = () => {
 
           <div className="d-flex flex-column flex-xl-row align-items-stretch align-items-xl-center gap-2 gap-xl-3 my-2 my-xl-0">
             <NavLink
-              to="/urgente"
+              to="/reservar"
               className={({ isActive }) =>
                 `btn fw-bold position-relative rounded-0 text-nowrap pulse-urgente ${isActive ? "bg-danger text-white" : "btn-outline-danger"}`
               }

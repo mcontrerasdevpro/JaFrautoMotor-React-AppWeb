@@ -20,7 +20,7 @@ export const Login = () => {
         try {
             const data = await apiFetch("/login", { method: "POST", body: { email, password } });
             dispatch({ type: "set_usuario", payload: data });
-            navigate(location.state?.from || "/urgente");
+            navigate(location.state?.from || "/mi-cuenta");
         } catch (err) {
             setError(err.message);
         } finally {

@@ -139,7 +139,7 @@ export const MiCuenta = () => {
                                                         }`}>{cita.status}</span>
                                                     </td>
                                                     <td className="text-end pe-3">
-                                                        {cita.status === "Pendiente" && (
+                                                        {(cita.status === "Pendiente" || cita.status === "Confirmada") && (
                                                             <button className="btn btn-sm btn-outline-danger border-0"
                                                                 onClick={() => cancelarCita(cita.id)}>
                                                                 <i className="fa-solid fa-xmark me-1"></i>CANCELAR

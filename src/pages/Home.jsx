@@ -82,8 +82,8 @@ export const Home = () => {
                                 Especialistas en mecánica integral, diagnosis avanzada y servicios urgentes con repuestos oficiales en Jaén.
                             </p>
                             <div className="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-lg-start mb-4">
-                                <Link to="/servicios" className="btn btn-danger btn-lg px-4 px-md-5 py-3 fw-bold shadow-lg rounded-0 text-nowrap">
-                                    VER SERVICIOS
+                                <Link to="/reservar" className="btn btn-danger btn-lg px-4 px-md-5 py-3 fw-bold shadow-lg rounded-0 text-nowrap">
+                                    <i className="fa-solid fa-calendar-check me-2"></i>PEDIR CITA
                                 </Link>
                                 <a href={TALLER.telefono.href} className="btn btn-outline-light btn-lg px-4 px-md-5 py-3 fw-bold rounded-0 boton-latido text-nowrap">
                                     <i className="fa-solid fa-phone me-2"></i>{TALLER.telefono.texto}

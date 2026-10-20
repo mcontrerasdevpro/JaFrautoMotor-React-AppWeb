@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
+import { Icono } from "../components/Icono";
 
 export const MiCuenta = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -59,11 +60,11 @@ export const MiCuenta = () => {
     };
 
     return (
-        <div className="container mt-5 pt-5 text-dark" style={{ minHeight: "85vh" }}>
+        <div className="container py-4 py-lg-5 text-dark" style={{ minHeight: "85vh" }}>
             <div className="d-flex justify-content-between align-items-center mb-4 border-bottom border-danger pb-3">
                 <h1 className="fw-bold m-0 text-uppercase">MI <span className="text-danger">CUENTA</span></h1>
                 <button className="btn btn-outline-dark btn-sm fw-bold" onClick={cerrarSesion}>
-                    <i className="fa-solid fa-power-off me-2"></i>CERRAR SESIÓN
+                    <Icono nombre="power-off" className="me-2" />CERRAR SESIÓN
                 </button>
             </div>
 
@@ -74,7 +75,7 @@ export const MiCuenta = () => {
                 <div className="col-lg-5">
                     <div className="card border-0 shadow-lg rounded-0">
                         <div className="card-header bg-dark text-white py-3">
-                            <h5 className="mb-0 fw-bold"><i className="fa-solid fa-user me-2 text-danger"></i>MIS DATOS</h5>
+                            <h5 className="mb-0 fw-bold"><Icono nombre="user" className="me-2 text-danger" />MIS DATOS</h5>
                         </div>
                         <div className="card-body">
                             <form onSubmit={guardarPerfil}>
@@ -104,7 +105,7 @@ export const MiCuenta = () => {
                 <div className="col-lg-7">
                     <div className="card border-0 shadow-lg rounded-0 overflow-hidden">
                         <div className="card-header bg-dark text-white py-3">
-                            <h5 className="mb-0 fw-bold"><i className="fa-solid fa-calendar-check me-2 text-danger"></i>MIS CITAS</h5>
+                            <h5 className="mb-0 fw-bold"><Icono nombre="calendar-check" className="me-2 text-danger" />MIS CITAS</h5>
                         </div>
                         <div className="card-body p-0">
                             <div className="table-responsive">
@@ -134,14 +135,15 @@ export const MiCuenta = () => {
                                                     <td>
                                                         <span className={`badge px-3 rounded-pill small ${
                                                             cita.status === "Pendiente" ? "bg-warning text-dark" :
+                                                            cita.status === "Confirmada" ? "bg-primary" :
                                                             cita.status === "Cancelada" ? "bg-secondary" : "bg-success"
                                                         }`}>{cita.status}</span>
                                                     </td>
                                                     <td className="text-end pe-3">
-                                                        {cita.status === "Pendiente" && (
+                                                        {(cita.status === "Pendiente" || cita.status === "Confirmada") && (
                                                             <button className="btn btn-sm btn-outline-danger border-0"
                                                                 onClick={() => cancelarCita(cita.id)}>
-                                                                <i className="fa-solid fa-xmark me-1"></i>CANCELAR
+                                                                <Icono nombre="xmark" className="me-1" />CANCELAR
                                                             </button>
                                                         )}
                                                     </td>

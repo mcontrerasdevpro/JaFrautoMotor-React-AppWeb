@@ -1,8 +1,8 @@
-import React from "react";
-
+import { Seo } from "../components/Seo";
 export const AvisoLegal = () => {
     return (
-        <div className="container mt-1 pt-5 text-dark pb-5">
+        <div className="container py-4 py-lg-5 text-dark">
+            <Seo titulo="Aviso legal" descripcion="Aviso legal de la web de JaFrauto Motor." ruta="/avisoLegal" noindex />
             <div className="row justify-content-center">
                 <div className="col-lg-10">
                     <h1 className="fw-bold border-bottom border-danger pb-3 mb-4 text-uppercase">
@@ -28,7 +28,7 @@ export const AvisoLegal = () => {
                             <li><strong>Denominación social:</strong> JAFRAUTO MOTOR SL</li>
                             <li><strong>NIF:</strong> B23792062</li>
                             <li><strong>Domicilio social:</strong> C/ BEDMAR 118 Polígono de los Olivares. 23009 JAEN</li>
-                            <li><strong>Teléfono:</strong> 637 830 670 Francisco; 659 603 058 Jacinto</li>
+                            <li><strong>Teléfono:</strong> 953 121 814 (taller); 637 830 670 (Francisco); 659 603 058 (Jacinto)</li>
                             <li><strong>e-mail:</strong> jafrautomotor@gmail.com</li>
                         </ul>
                     </section>

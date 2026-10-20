@@ -35,8 +35,8 @@ export const AccesoGestion = () => {
     };
 
     return (
-        <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-dark text-white" style={{ marginTop: "-100px" }}>
-            <div className="card bg-black border-danger p-4 shadow-lg" style={{ width: "350px" }}>
+        <div className="container-fluid d-flex align-items-center justify-content-center bg-dark text-white py-5 px-3" style={{ minHeight: "75vh" }}>
+            <div className="card bg-black border-danger p-4 shadow-lg text-white" style={{ width: "100%", maxWidth: "380px" }}>
                 <div className="text-center mb-4">
                     <h2 className="fw-bold">JAFRAUTO <span className="text-danger">ADMIN</span></h2>
                     <p className="small text-secondary">Acceso Restringido - Personal Autorizado</p>

@@ -1,137 +1,87 @@
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { Icono } from "./Icono";
+
+const ENLACES = [
+  { to: "/", texto: "INICIO", end: true },
+  { to: "/taller", texto: "TALLER" },
+  { to: "/servicios", texto: "SERVICIOS" },
+  { to: "/promociones", texto: "PROMOCIONES" },
+  { to: "/presupuesto", texto: "PRESUPUESTO" },
+  { to: "/contacto", texto: "CONTACTO" }
+];
 
 export const Navbar = () => {
-  const { store, dispatch } = useGlobalReducer();
-  const navigate = useNavigate(); // <--- ESTA ES LA LÍNEA QUE FALTABA
-  
-  const [busqueda, setBusqueda] = useState("");
-  const totalUrgentes = store?.urgente?.length || 0;
-  const totalEuros = store.urgente.reduce((acc, item) => acc + (Number(item.precio) || 0), 0);
+  const { store } = useGlobalReducer();
+  const { pathname } = useLocation();
+  // El menú móvil lo controla React (no el JS de Bootstrap) para poder cerrarlo al navegar
+  const [abierto, setAbierto] = useState(false);
 
-  const handleBusqueda = (e) => {
-    const valor = e.target.value;
-    setBusqueda(valor);
+  useEffect(() => {
+    setAbierto(false);
+  }, [pathname]);
 
-    // Actualizamos el store siempre para que el filtro funcione en tiempo real
-    dispatch({ type: "set_busqueda", payload: valor });
-
-    // Si el usuario escribe algo, lo mandamos a la página de servicios
-    if (valor.length > 0) {
-      navigate("/servicios");
-    }
-  };
+  const totalServicios = store.urgente.length;
 
   return (
-    <nav className="navbar navbar-expand-xl px-4 py-2 sticky-top shadow-sm"
-      style={{ backgroundColor: "#ffffff", borderBottom: "3px solid #fa0606" }}>
-      <div className="container-fluid">
+    <nav className="navbar navbar-expand-xl bg-white shadow-sm px-3 px-xl-4 py-2" style={{ borderBottom: "3px solid #fa0606" }}
+      aria-label="Navegación principal">
+      <div className="container-fluid px-0">
 
-        {/* LOGO */}
-        <NavLink
-          to="/gestion"
-          className="navbar-brand fw-bold fs-3 text-black m-0 p-0 me-4"
-          style={{
-            position: "relative",
-            zIndex: 9999,
-            display: "inline-block",
-            cursor: "pointer",
-            pointerEvents: "auto"
-          }}
-        >
+        {/* LOGO: enlaza a /gestion a propósito (acceso interno del taller) */}
+        <NavLink to="/gestion" className="navbar-brand fw-bold text-black m-0 p-0 me-xl-4 logo-jafrauto">
           JAFRAUTO<span className="text-danger">MOTOR</span>
         </NavLink>
 
-        {/* BOTÓN HAMBURGUESA */}
         <button
           className="navbar-toggler border-danger shadow-none"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded={abierto}
+          aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
+          onClick={() => setAbierto(!abierto)}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarContent">
+        <div className={`collapse navbar-collapse ${abierto ? "show" : ""}`} id="navbarContent">
 
-          {/* --- MENÚ DE NAVEGACIÓN PRINCIPAL --- */}
-          <ul className="navbar-nav mb-2 mb-xl-0 gap-2">
-            <li className="nav-item">
-              <NavLink to="/" className={({ isActive }) =>
-                `nav-link fw-bold ${isActive ? "text-danger" : "text-black"}`}>
-                <i className="fa-solid fa-house me-1 small"></i> INICIO
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/taller" className={({ isActive }) =>
-                `nav-link fw-bold ${isActive ? "text-danger" : "text-black"}`}>TALLER</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/servicios" className={({ isActive }) =>
-                `nav-link fw-bold ${isActive ? "text-danger" : "text-black"}`}>SERVICIOS</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/promociones" className={({ isActive }) =>
-                `nav-link fw-bold ${isActive ? "text-danger" : "text-black"}`}>PROMOCIONES</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/presupuesto"
-                className={({ isActive }) =>
-                  `nav-link fw-bold ${isActive ? "text-danger" : "text-black"}`
-                }
-              >
-                SOLICITAR PRESUPUESTO
-              </NavLink>
-            </li>
+          <ul className="navbar-nav me-auto mt-2 mt-xl-0 gap-xl-1">
+            {ENLACES.map(({ to, texto, end }) => (
+              <li className="nav-item" key={to}>
+                <NavLink to={to} end={end} className={({ isActive }) =>
+                  `nav-link fw-bold text-nowrap px-xl-2 ${isActive ? "text-danger" : "text-black"}`}>
+                  {texto}
+                </NavLink>
+              </li>
+            ))}
           </ul>
 
-          {/* --- BUSCADOR --- */}
-          <div className="mx-auto my-3 my-xl-0 d-flex align-items-center gap-2">
-            <div style={{ position: "relative", width: "240px" }}>
-              <input
-                type="text"
-                className="form-control border-danger shadow-none bg-light"
-                placeholder="Buscar servicio..."
-                style={{ borderRadius: "0", fontSize: "0.85rem" }}
-                value={busqueda}
-                onChange={handleBusqueda}
-              />
-              <i className="fa-solid fa-magnifying-glass position-absolute end-0 top-50 translate-middle-y me-3 text-danger opacity-50"></i>
-            </div>
-          </div>
-
-          {/* --- BOTÓN MI CITA / RESERVAR --- */}
-          <div className="ms-xl-4 d-grid d-xl-block">
+          <div className="d-flex flex-column flex-xl-row align-items-stretch align-items-xl-center gap-2 gap-xl-3 my-2 my-xl-0">
             <NavLink
-              to="/urgente"
+              to="/reservar"
               className={({ isActive }) =>
-                `btn fw-bold position-relative rounded-0 pulse-urgente ${isActive ? "bg-danger text-white" : "btn-outline-danger"}`
+                `btn fw-bold position-relative rounded-0 text-nowrap pulse-urgente ${isActive ? "bg-danger text-white" : "btn-outline-danger"}`
               }
-              style={{ transition: "0.3s", zIndex: 9999, pointerEvents: "auto" }}
             >
-              <i className="fa-solid fa-cart-shopping me-2"></i>
-              RESERVAR: ({totalEuros}€)
-              {store.urgente.length > 0 && (
+              <Icono nombre="calendar-check" className="me-2" />PEDIR CITA
+              {totalServicios > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark border border-white">
-                  {store.urgente.length}
+                  {totalServicios}
+                  <span className="visually-hidden"> servicios elegidos</span>
                 </span>
               )}
             </NavLink>
-          </div>
 
-          {/* --- CUENTA DE CLIENTE --- */}
-          <div className="ms-xl-3 d-flex align-items-center gap-2 my-2 my-xl-0">
             {store.usuario ? (
-              <NavLink to="/mi-cuenta" className="nav-link fw-bold text-black">
-                <i className="fa-solid fa-user me-1 small"></i> {store.usuario.name?.split(" ")[0]?.toUpperCase()}
+              <NavLink to="/mi-cuenta" className="nav-link fw-bold text-black text-nowrap">
+                <Icono nombre="user" className="me-1 small" /> {store.usuario.name?.split(" ")[0]?.toUpperCase()}
               </NavLink>
             ) : (
-              <>
-                <NavLink to="/login" className="nav-link fw-bold text-black">Iniciar sesión</NavLink>
-                <NavLink to="/registro" className="btn btn-sm btn-outline-danger rounded-0 fw-bold">Registrarse</NavLink>
-              </>
+              <NavLink to="/login" className="nav-link fw-bold text-black text-nowrap">
+                <Icono nombre="user" className="me-1 small" /> ACCEDER
+              </NavLink>
             )}
           </div>
 

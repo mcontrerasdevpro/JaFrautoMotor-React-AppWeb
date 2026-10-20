@@ -2,27 +2,28 @@ import { Outlet } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-import { CookieBanner } from "../components/CookieBanner"; // Importación confirmada
+import { CookieBanner } from "../components/CookieBanner";
+import { TALLER } from "../config";
+import { Icono } from "../components/Icono";
+import { BarraMovil } from "../components/BarraMovil";
 
 export const Layout = () => {
     return (
         /* Contenedor principal con Flexbox para empujar el footer al fondo */
-        <div style={{ 
-            display: "flex", 
-            flexDirection: "column", 
-            minHeight: "100vh" 
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh"
         }}>
             <ScrollToTop />
 
-            {/* HEADER SIEMPRE FIJO */}
-            <header style={{ position: "fixed", top: 0, width: "100%", zIndex: 4000 }}>
+            {/* Header pegajoso: ocupa su propio alto, así el contenido nunca queda debajo ni deja hueco */}
+            <header className="sticky-top" style={{ zIndex: 4000 }}>
                 <Navbar />
             </header>
 
-            {/* CONTENIDO PRINCIPAL */}
-            <main style={{ 
+            <main style={{
                 flex: "1 0 auto",
-                paddingTop: "100px",
                 paddingBottom: "50px",
                 position: "relative"
             }}>
@@ -32,43 +33,15 @@ export const Layout = () => {
             {/* BANNER DE COOKIES: Aparece sobre el footer cuando es necesario */}
             <CookieBanner />
 
-            {/* FOOTER NATURAL */}
-            <footer style={{ 
-                backgroundColor: "#1a1a1a",
-                borderTop: "4px solid #fa0606",
-                width: "100%"
-            }}>
-                <Footer />
-            </footer>
+            <Footer />
+
+            <BarraMovil />
 
             {/* BOTÓN WHATSAPP */}
-            <a href="https://wa.me/659603058" className="btn-whatsapp shadow-lg">
-                <i className="fa-brands fa-whatsapp"></i>
+            <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer"
+                className="btn-whatsapp shadow-lg" aria-label="Escríbenos por WhatsApp">
+                <Icono nombre="whatsapp" />
             </a>
-
-            <style>{`
-                .btn-whatsapp {
-                    position: fixed; 
-                    right: 20px; 
-                    bottom: 30px; 
-                    background: #25d366; 
-                    color: white; 
-                    border-radius: 50%;
-                    width: 60px; height: 60px; 
-                    display: flex;
-                    align-items: center; justify-content: center;
-                    font-size: 30px; z-index: 5000; text-decoration: none;
-                    transition: transform 0.3s ease;
-                }
-                .btn-whatsapp:hover { transform: scale(1.1); color: white; }
-                
-                /* Ajuste responsivo para que el banner de cookies no tape el botón en móviles */
-                @media (max-width: 768px) {
-                    .btn-whatsapp {
-                        bottom: 100px; /* Lo subimos temporalmente si el banner está activo */
-                    }
-                }
-            `}</style>
         </div>
     );
 };

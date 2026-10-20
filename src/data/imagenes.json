@@ -1,0 +1,79 @@
+{
+  "portada": {
+    "anchos": [
+      480,
+      800,
+      1196
+    ],
+    "ancho": 1196,
+    "alto": 577
+  },
+  "fachada": {
+    "anchos": [
+      480,
+      800,
+      1200
+    ],
+    "ancho": 1601,
+    "alto": 1110
+  },
+  "taller": {
+    "anchos": [
+      480,
+      800,
+      1197
+    ],
+    "ancho": 1197,
+    "alto": 1059
+  },
+  "cambioaceite": {
+    "anchos": [
+      480,
+      800,
+      1100
+    ],
+    "ancho": 1100,
+    "alto": 619
+  },
+  "sistemafrenos": {
+    "anchos": [
+      480,
+      800,
+      830
+    ],
+    "ancho": 830,
+    "alto": 460
+  },
+  "diagnosis": {
+    "anchos": [
+      480,
+      737
+    ],
+    "ancho": 737,
+    "alto": 338
+  },
+  "neumaticos": {
+    "anchos": [
+      466
+    ],
+    "ancho": 466,
+    "alto": 305
+  },
+  "aireacondicionado": {
+    "anchos": [
+      480,
+      800,
+      1200
+    ],
+    "ancho": 1260,
+    "alto": 692
+  },
+  "preitv": {
+    "anchos": [
+      480,
+      572
+    ],
+    "ancho": 572,
+    "alto": 407
+  }
+}

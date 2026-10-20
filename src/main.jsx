@@ -1,14 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { ViteReactSSG } from 'vite-react-ssg'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
-import { RouterProvider } from "react-router-dom";
-import { router } from "./routes";
-import { StoreProvider } from './hooks/useGlobalReducer';
+import { routes } from "./routes";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <StoreProvider>
-            <RouterProvider router={router} />
-        </StoreProvider>
-    </React.StrictMode>
-)
+// En el build genera el HTML de cada página pública; en el navegador hidrata
+// (o renderiza desde cero en las rutas que solo existen en el cliente)
+export const createRoot = ViteReactSSG({ routes })

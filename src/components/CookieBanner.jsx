@@ -4,7 +4,8 @@ import useConsentimiento, { guardarConsentimiento } from "../hooks/useConsentimi
 export const CookieBanner = () => {
     const consentimiento = useConsentimiento();
 
-    if (consentimiento) return null;
+    // undefined = aún sin leer (prerender); solo se muestra si no ha elegido
+    if (consentimiento !== null) return null;
 
     return (
         <div className="fixed-bottom bg-dark text-white p-3 shadow-lg border-top border-danger" style={{ zIndex: 9999 }}

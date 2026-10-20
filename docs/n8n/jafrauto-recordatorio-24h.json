@@ -1,0 +1,104 @@
+{
+  "id": "J48QjxeAlBA3JaCZ",
+  "name": "[DEV] JaFrauto — Recordatorio de cita 24 h (WhatsApp)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "rec-trigger",
+      "name": "Cada tarde a las 18:00 (dom-jue)",
+      "notes": "De domingo a jueves: el domingo avisa de las citas del lunes.",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "0 18 * * 0-4" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rec-get",
+      "name": "Pedir citas de mañana",
+      "notes": "Credencial Header Auth: nombre X-API-Key, valor = N8N_API_KEY de la API. Devuelve una cita por item.",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "position": [260, 0],
+      "parameters": {
+        "method": "GET",
+        "url": "https://jafrautomotor-react-appweb.onrender.com/internal/reminders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": { "timeout": 90000 }
+      }
+    },
+    {
+      "id": "rec-wa",
+      "name": "Enviar recordatorio por WhatsApp",
+      "webhookId": "28517d75-13ab-44f9-8531-c058bf4c23a5",
+      "notes": "Requiere la plantilla aprobada en Meta 'jafrauto_recordatorio_cita' (es) con 4 variables: nombre, hora, servicios, enlace. Elegir el número emisor al asignar la credencial de WhatsApp.",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [520, 0],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendTemplate",
+        "phoneNumberId": "CONFIGURAR_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $json.cliente.telefono.replace('+', '') }}",
+        "template": "jafrauto_recordatorio_cita|es",
+        "components": {
+          "component": [
+            {
+              "type": "body",
+              "bodyParameters": {
+                "parameter": [
+                  { "type": "text", "text": "={{ $json.cliente.nombre }}" },
+                  { "type": "text", "text": "={{ $json.hora }}" },
+                  { "type": "text", "text": "={{ $json.servicios.join(', ') }}" },
+                  { "type": "text", "text": "={{ $json.enlace_gestion }}" }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rec-mark",
+      "name": "Marcar recordatorio enviado",
+      "notes": "Solo se marca si el WhatsApp se envió. Si el envío falla, la cita no se marca y el fallo queda en el registro de ejecuciones (no se reintenta otro día porque la cita ya habrá pasado).",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "position": [780, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://jafrautomotor-react-appweb.onrender.com/internal/appointments/{{ $('Pedir citas de mañana').item.json.id }}/reminded",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Cada tarde a las 18:00 (dom-jue)": {
+      "main": [[{ "node": "Pedir citas de mañana", "type": "main", "index": 0 }]]
+    },
+    "Pedir citas de mañana": {
+      "main": [[{ "node": "Enviar recordatorio por WhatsApp", "type": "main", "index": 0 }]]
+    },
+    "Enviar recordatorio por WhatsApp": {
+      "main": [[{ "node": "Marcar recordatorio enviado", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "timezone": "Europe/Madrid",
+    "executionOrder": "v1"
+  }
+}

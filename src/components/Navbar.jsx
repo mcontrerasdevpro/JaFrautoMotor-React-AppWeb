@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { Icono } from "./Icono";
 
 const ENLACES = [
   { to: "/", texto: "INICIO", end: true },
@@ -59,12 +60,12 @@ export const Navbar = () => {
 
           <div className="d-flex flex-column flex-xl-row align-items-stretch align-items-xl-center gap-2 gap-xl-3 my-2 my-xl-0">
             <NavLink
-              to="/urgente"
+              to="/reservar"
               className={({ isActive }) =>
                 `btn fw-bold position-relative rounded-0 text-nowrap pulse-urgente ${isActive ? "bg-danger text-white" : "btn-outline-danger"}`
               }
             >
-              <i className="fa-solid fa-calendar-check me-2"></i>PEDIR CITA
+              <Icono nombre="calendar-check" className="me-2" />PEDIR CITA
               {totalServicios > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark border border-white">
                   {totalServicios}
@@ -75,11 +76,11 @@ export const Navbar = () => {
 
             {store.usuario ? (
               <NavLink to="/mi-cuenta" className="nav-link fw-bold text-black text-nowrap">
-                <i className="fa-solid fa-user me-1 small"></i> {store.usuario.name?.split(" ")[0]?.toUpperCase()}
+                <Icono nombre="user" className="me-1 small" /> {store.usuario.name?.split(" ")[0]?.toUpperCase()}
               </NavLink>
             ) : (
               <NavLink to="/login" className="nav-link fw-bold text-black text-nowrap">
-                <i className="fa-solid fa-user me-1 small"></i> ACCEDER
+                <Icono nombre="user" className="me-1 small" /> ACCEDER
               </NavLink>
             )}
           </div>

@@ -1,0 +1,48 @@
+{
+  "id": "vn34AMHRmvhBg1aV",
+  "name": "[DEV] JaFrauto — Mantener API despierta (Render)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "ping-trigger",
+      "name": "Cada 10 min en horario de taller",
+      "notes": "Render gratuito duerme la API tras ~15 min sin uso. Solo hace falta mientras el backend esté en Render; en el VPS se apaga.",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "parameters": {
+        "rule": {
+          "interval": [
+            { "field": "cronExpression", "expression": "*/10 8-19 * * 1-5" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ping-health",
+      "name": "Llamar a /health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput",
+      "position": [260, 0],
+      "parameters": {
+        "method": "GET",
+        "url": "https://jafrautomotor-react-appweb.onrender.com/health",
+        "options": { "timeout": 90000 }
+      }
+    }
+  ],
+  "connections": {
+    "Cada 10 min en horario de taller": {
+      "main": [[{ "node": "Llamar a /health", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "saveDataSuccessExecution": "none",
+    "timezone": "Europe/Madrid",
+    "executionOrder": "v1"
+  }
+}

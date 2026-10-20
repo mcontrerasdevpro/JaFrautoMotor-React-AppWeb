@@ -2,6 +2,8 @@ import { useState } from "react";
 import { apiFetch } from "../api";
 import { TALLER } from "../config";
 import { CasillaPrivacidad } from "../components/CasillaPrivacidad";
+import { Seo } from "../components/Seo";
+import { Icono } from "../components/Icono";
 
 const FORMULARIO_VACIO = { vehicle: "", plate: "", message: "", name: "", phone: "", email: "" };
 
@@ -38,7 +40,7 @@ export const Presupuesto = () => {
         return (
             <div className="container py-4 py-lg-5 text-center text-dark" style={{ minHeight: "70vh" }}>
                 <div className="card border-0 shadow-lg p-5 bg-white">
-                    <i className="fa-solid fa-paper-plane fa-4x text-danger mb-4"></i>
+                    <Icono nombre="paper-plane" className="fa-4x text-danger mb-4" />
                     <h2 className="fw-bold">¡SOLICITUD ENVIADA!</h2>
                     <p className="lead text-secondary">Hemos recibido los datos de tu vehículo. Francisco o Jacinto te contactarán pronto con una valoración.</p>
                     <p className="text-secondary">Si es urgente, llámanos al <a href={TALLER.telefono.href} className="fw-bold text-danger">{TALLER.telefono.texto}</a>.</p>
@@ -50,6 +52,7 @@ export const Presupuesto = () => {
 
     return (
         <div className="container py-4 py-lg-5 text-dark">
+            <Seo titulo="Pide presupuesto para tu coche en Jaén" descripcion="Cuéntanos qué le pasa a tu coche y te enviamos un presupuesto sin compromiso. Taller mecánico JaFrauto Motor, Polígono Los Olivares (Jaén)." ruta="/presupuesto" />
             <div className="row g-4 g-lg-5">
                 {/* Columna de Texto Informativo */}
                 <div className="col-lg-5">
@@ -59,7 +62,7 @@ export const Presupuesto = () => {
                     <div className="mt-5">
                         <div className="d-flex align-items-center mb-4">
                             <div className="bg-danger text-white p-3 rounded-circle me-3">
-                                <i className="fa-solid fa-file-invoice-dollar"></i>
+                                <Icono nombre="file-invoice-dollar" />
                             </div>
                             <div>
                                 <h6 className="fw-bold mb-0">Sin compromiso</h6>
@@ -68,7 +71,7 @@ export const Presupuesto = () => {
                         </div>
                         <div className="d-flex align-items-center mb-4">
                             <div className="bg-dark text-white p-3 rounded-circle me-3">
-                                <i className="fa-solid fa-bolt"></i>
+                                <Icono nombre="bolt" />
                             </div>
                             <div>
                                 <h6 className="fw-bold mb-0">Respuesta Rápida</h6>

@@ -1,6 +1,8 @@
+import { Seo } from "../components/Seo";
 export const PoliticaPrivacidad = () => {
     return (
         <div className="container py-4 py-lg-5 text-dark">
+            <Seo titulo="Política de privacidad" descripcion="Política de privacidad de JaFrauto Motor: qué datos recogemos y cómo los tratamos." ruta="/politicaPrivacidad" noindex />
             <div className="row justify-content-center">
                 <div className="col-lg-10">
                     <h1 className="fw-bold border-bottom border-danger pb-3 mb-4 text-uppercase">

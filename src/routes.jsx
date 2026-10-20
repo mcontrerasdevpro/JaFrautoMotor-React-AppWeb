@@ -1,58 +1,63 @@
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { AvisoLegal } from "./pages/AvisoLegal";
 import { Presupuesto } from "./pages/Presupuesto";
 import { PoliticaPrivacidad } from "./pages/PoliticaPrivacidad";
 import { Servicios } from "./pages/Servicios";
+import { ServicioDetalle } from "./pages/ServicioDetalle";
 import { Contacto } from "./pages/Contacto";
 import { Taller } from "./pages/Taller";
 import { Promociones } from "./pages/Promociones";
-import { Urgente } from "./pages/Urgente";
-import { AccesoGestion } from "./pages/AccesoGestion";
-import { PanelInterno } from "./pages/PanelInterno";
 import { Cookies } from "./pages/Cookies";
-import { Login } from "./pages/Login";
-import { Registro } from "./pages/Registro";
-import { MiCuenta } from "./pages/MiCuenta";
 import { NotFound } from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
+import { StoreProvider } from "./hooks/useGlobalReducer";
+import { PAGINAS_SERVICIO } from "./data/paginasServicio";
 
-export const router = createBrowserRouter(
-    createRoutesFromElements(
-      // Todas las rutas cuelgan del Layout (navbar, footer, cookies y WhatsApp)
-      <Route path="/" element={<Layout />} errorElement={<NotFound />}>
+// Páginas que solo se usan en el navegador (reserva, sesión, panel): se cargan bajo
+// demanda para que las páginas públicas no descarguen su código
+const bajoDemanda = (cargar, nombre) => () => cargar().then((m) => ({ Component: m[nombre] }));
 
-        <Route path="/" element={<Home />} />
-        <Route path="/avisoLegal" element={<AvisoLegal />} />
-        <Route path="/presupuesto" element={<Presupuesto />} />
-        <Route path="/politicaPrivacidad" element={<PoliticaPrivacidad />} />
-        <Route path="/servicios" element={<Servicios />} />
-        <Route path="/contacto" element={<Contacto />} />
-        <Route path="/taller" element={<Taller />} />
-        <Route path="/promociones" element={<Promociones />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/gestion" element={<AccesoGestion />} />
-        <Route path="/cookies" element={<Cookies />} />
+export const routes = [
+  {
+    // Todas las rutas cuelgan del Layout (navbar, footer, cookies y WhatsApp)
+    path: "/",
+    element: <StoreProvider><Layout /></StoreProvider>,
+    errorElement: <NotFound />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "taller", element: <Taller /> },
+      { path: "servicios", element: <Servicios /> },
+      {
+        path: "servicios/:slug",
+        element: <ServicioDetalle />,
+        getStaticPaths: () => PAGINAS_SERVICIO.map((p) => `servicios/${p.slug}`)
+      },
+      { path: "promociones", element: <Promociones /> },
+      { path: "presupuesto", element: <Presupuesto /> },
+      { path: "contacto", element: <Contacto /> },
+      { path: "avisoLegal", element: <AvisoLegal /> },
+      { path: "politicaPrivacidad", element: <PoliticaPrivacidad /> },
+      { path: "cookies", element: <Cookies /> },
+      { path: "404", element: <NotFound /> },
 
-        {/* Rutas que requieren estar registrado/logueado */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/urgente" element={<Urgente />} />
-          <Route path="/mi-cuenta" element={<MiCuenta />} />
-        </Route>
+      { path: "login", lazy: bajoDemanda(() => import("./pages/Login"), "Login") },
+      { path: "registro", lazy: bajoDemanda(() => import("./pages/Registro"), "Registro") },
+      { path: "gestion", lazy: bajoDemanda(() => import("./pages/AccesoGestion"), "AccesoGestion") },
+      { path: "reservar", lazy: bajoDemanda(() => import("./pages/Reservar"), "Reservar") },
+      { path: "cita/:token", lazy: bajoDemanda(() => import("./pages/GestionCita"), "GestionCita") },
+      // Enlace antiguo de la reserva (antes pedía cuenta)
+      { path: "urgente", element: <Navigate to="/reservar" replace /> },
 
-        {/* Rutas que requieren cuenta de administrador */}
-        <Route element={<AdminRoute />}>
-          <Route path="/panel-interno" element={<PanelInterno />} />
-        </Route>
+      // Rutas que requieren estar registrado/logueado
+      { element: <ProtectedRoute />, children: [{ path: "mi-cuenta", lazy: bajoDemanda(() => import("./pages/MiCuenta"), "MiCuenta") }] },
 
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    )
-);
+      // Rutas que requieren cuenta de administrador
+      { element: <AdminRoute />, children: [{ path: "panel-interno", lazy: bajoDemanda(() => import("./pages/PanelInterno"), "PanelInterno") }] },
+
+      { path: "*", element: <NotFound /> }
+    ]
+  }
+];

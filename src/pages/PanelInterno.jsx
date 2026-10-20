@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
+import { PestanaAgenda } from "../components/panel/PestanaAgenda";
+import { Icono } from "../components/Icono";
 
 const COLOR_ESTADO = {
     Pendiente: "bg-warning text-dark",
@@ -45,7 +47,7 @@ const FilaCliente = ({ cliente, citasDelCliente, token, onNotasGuardadas }) => {
                 <td className="small">{cliente.phone}</td>
                 <td className="small">{citasDelCliente.length}</td>
                 <td className="text-end pe-4">
-                    <i className={`fa-solid fa-chevron-${abierto ? "up" : "down"} text-muted`}></i>
+                    <Icono nombre={abierto ? "chevron-up" : "chevron-down"} className="text-muted" />
                 </td>
             </tr>
             {abierto && (
@@ -183,7 +185,7 @@ export const PanelInterno = () => {
             <div className="d-flex justify-content-between align-items-center mb-4 border-bottom border-danger pb-3">
                 <h1 className="fw-bold m-0 text-uppercase">🛠 GESTIÓN <span className="text-danger">INTERNA</span></h1>
                 <button className="btn btn-outline-dark btn-sm fw-bold" onClick={cerrarSesion}>
-                    <i className="fa-solid fa-power-off me-2"></i>CERRAR SESIÓN
+                    <Icono nombre="power-off" className="me-2" />CERRAR SESIÓN
                 </button>
             </div>
 
@@ -197,7 +199,7 @@ export const PanelInterno = () => {
                                 <h6 className="text-uppercase fw-bold opacity-75 mb-1 small">Citas en espera</h6>
                                 <h2 className="display-4 fw-bold mb-0">{pendientes.length}</h2>
                             </div>
-                            <i className="fa-solid fa-calendar-check fa-3x opacity-25"></i>
+                            <Icono nombre="calendar-check" className="fa-3x opacity-25" />
                         </div>
                     </div>
                 </div>
@@ -208,7 +210,7 @@ export const PanelInterno = () => {
                                 <h6 className="text-uppercase fw-bold opacity-75 mb-1 small">Clientes registrados</h6>
                                 <h2 className="display-4 fw-bold mb-0">{clientes.length}</h2>
                             </div>
-                            <i className="fa-solid fa-users fa-3x opacity-25"></i>
+                            <Icono nombre="users" className="fa-3x opacity-25" />
                         </div>
                     </div>
                 </div>
@@ -219,7 +221,7 @@ export const PanelInterno = () => {
                                 <h6 className="text-uppercase fw-bold opacity-75 mb-1 small">Presupuestos nuevos</h6>
                                 <h2 className="display-4 fw-bold mb-0">{leadsNuevos.length}</h2>
                             </div>
-                            <i className="fa-solid fa-file-invoice fa-3x opacity-25"></i>
+                            <Icono nombre="file-invoice" className="fa-3x opacity-25" />
                         </div>
                     </div>
                 </div>
@@ -230,19 +232,25 @@ export const PanelInterno = () => {
                 <li className="nav-item">
                     <button className={`nav-link fw-bold ${tab === "solicitudes" ? "active text-danger" : "text-dark"}`}
                         onClick={() => setTab("solicitudes")}>
-                        <i className="fa-solid fa-list me-2"></i>SOLICITUDES
+                        <Icono nombre="list" className="me-2" />SOLICITUDES
                     </button>
                 </li>
                 <li className="nav-item">
                     <button className={`nav-link fw-bold ${tab === "clientes" ? "active text-danger" : "text-dark"}`}
                         onClick={() => setTab("clientes")}>
-                        <i className="fa-solid fa-users me-2"></i>CLIENTES
+                        <Icono nombre="users" className="me-2" />CLIENTES
                     </button>
                 </li>
                 <li className="nav-item">
                     <button className={`nav-link fw-bold ${tab === "presupuestos" ? "active text-danger" : "text-dark"}`}
                         onClick={() => setTab("presupuestos")}>
-                        <i className="fa-solid fa-file-invoice me-2"></i>PRESUPUESTOS Y CONTACTO
+                        <Icono nombre="file-invoice" className="me-2" />PRESUPUESTOS Y CONTACTO
+                    </button>
+                </li>
+                <li className="nav-item">
+                    <button className={`nav-link fw-bold ${tab === "agenda" ? "active text-danger" : "text-dark"}`}
+                        onClick={() => setTab("agenda")}>
+                        <Icono nombre="calendar-days" className="me-2" />AGENDA
                     </button>
                 </li>
             </ul>
@@ -255,6 +263,7 @@ export const PanelInterno = () => {
                                 <thead className="table-light text-uppercase small fw-bold">
                                     <tr>
                                         <th className="ps-4 py-3">Cliente</th>
+                                        <th>Vehículo</th>
                                         <th>Servicios</th>
                                         <th>Fecha</th>
                                         <th>Importe</th>
@@ -265,11 +274,11 @@ export const PanelInterno = () => {
                                 <tbody>
                                     {cargando ? (
                                         <tr>
-                                            <td colSpan="6" className="text-center py-5 text-muted">Cargando...</td>
+                                            <td colSpan="7" className="text-center py-5 text-muted">Cargando...</td>
                                         </tr>
                                     ) : citas.length === 0 ? (
                                         <tr>
-                                            <td colSpan="6" className="text-center py-5 text-muted italic">
+                                            <td colSpan="7" className="text-center py-5 text-muted italic">
                                                 No hay citas pendientes de procesar.
                                             </td>
                                         </tr>
@@ -277,11 +286,20 @@ export const PanelInterno = () => {
                                         citas.map((cita) => (
                                             <tr key={cita.id}>
                                                 <td className="ps-4">
-                                                    <div className="fw-bold">{cita.client}</div>
-                                                    <small className="text-muted">{cita.contact} · Ref: {cita.id}</small>
+                                                    <div className="fw-bold">
+                                                        {cita.client}
+                                                        {!cita.user_id && <span className="badge bg-light text-dark border ms-2">Invitado</span>}
+                                                    </div>
+                                                    <a href={`tel:${cita.contact}`} className="small text-decoration-none">{cita.contact}</a>
+                                                    <small className="text-muted"> · Ref: {cita.id}</small>
                                                 </td>
                                                 <td className="small">
+                                                    {cita.vehicle || "-"}
+                                                    {cita.plate && <div className="text-muted">{cita.plate}</div>}
+                                                </td>
+                                                <td className="small" style={{ minWidth: "180px" }}>
                                                     {(cita.services || []).map(s => s.name).join(", ")}
+                                                    {cita.symptom && <div className="text-muted fst-italic" style={{ whiteSpace: "pre-line" }}>{cita.symptom}</div>}
                                                 </td>
                                                 <td className="small">{cita.date} {cita.time}</td>
                                                 <td>
@@ -297,7 +315,7 @@ export const PanelInterno = () => {
                                                             onClick={() => cambiarEstadoCita(cita.id, "Confirmada")}
                                                             title="Confirmar la cita con el cliente"
                                                         >
-                                                            <i className="fa-solid fa-check me-1"></i> CONFIRMAR
+                                                            <Icono nombre="check" className="me-1" /> CONFIRMAR
                                                         </button>
                                                     )}
                                                     {(cita.status === "Pendiente" || cita.status === "Confirmada") && (
@@ -306,7 +324,16 @@ export const PanelInterno = () => {
                                                             onClick={() => cambiarEstadoCita(cita.id, "Completada")}
                                                             title="Completar y archivar"
                                                         >
-                                                            <i className="fa-solid fa-check-double me-1"></i> ATENDIDA
+                                                            <Icono nombre="check-double" className="me-1" /> ATENDIDA
+                                                        </button>
+                                                    )}
+                                                    {(cita.status === "Pendiente" || cita.status === "Confirmada") && (
+                                                        <button
+                                                            className="btn btn-sm btn-outline-secondary border-0"
+                                                            onClick={() => window.confirm(`¿Cancelar la cita de ${cita.client}?`) && cambiarEstadoCita(cita.id, "Cancelada")}
+                                                            title="Cancelar la cita"
+                                                        >
+                                                            <Icono nombre="xmark" className="me-1" /> CANCELAR
                                                         </button>
                                                     )}
                                                 </td>
@@ -432,6 +459,8 @@ export const PanelInterno = () => {
                     </div>
                 </div>
             )}
+
+            {tab === "agenda" && <PestanaAgenda token={store.token} />}
         </div>
     );
 };

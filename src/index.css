@@ -25,3 +25,112 @@
 .pulse-urgente {
   animation: pulse-red 2s infinite;
 }
+
+/* Iconos SVG (componente Icono): mismo tamaño y alineación que los de Font Awesome */
+.icono {
+  display: inline-block;
+  height: 1em;
+  width: auto;
+  overflow: visible;
+  vertical-align: -0.125em;
+  box-sizing: content-box;
+}
+
+.icono.fa-2x { font-size: 2em; }
+.icono.fa-3x { font-size: 3em; }
+.icono.fa-4x { font-size: 4em; }
+
+/* Enlaces del footer */
+.hover-red:hover { color: #fa0606 !important; transition: 0.3s; }
+
+/* Botón flotante de WhatsApp */
+.btn-whatsapp {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  z-index: 5000;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+.btn-whatsapp:hover { transform: scale(1.1); color: white; }
+
+/* Portada: botón con latido y hero */
+@keyframes pulse-blanco-fuerte {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8); }
+  70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+.boton-latido {
+  animation: pulse-blanco-fuerte 2s infinite !important;
+  border: 2px solid white !important;
+  position: relative;
+  z-index: 10;
+}
+/* Ajuste para que el rasgado no ensanche la web en móvil */
+.hero-section { overflow: hidden; position: relative; min-height: 85vh; background-color: #1a1a1a; }
+.hero-capa { background: rgba(0, 0, 0, 0.6); }
+@media (min-width: 992px) {
+  .hero-capa { background: linear-gradient(115deg, rgba(26, 26, 26, 1) 0%, rgba(26, 26, 26, 0.9) 45%, rgba(26, 26, 26, 0) 70%); }
+}
+
+/* Barra fija de acciones en móvil (Llamar · WhatsApp · Pedir cita) */
+.barra-movil {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5000;
+  display: flex;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+.barra-movil__accion {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 60px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.barra-movil__accion .icono { font-size: 1.3rem; }
+.barra-movil__accion:hover,
+.barra-movil__accion:focus { color: #fff; }
+.barra-movil__whatsapp { background: #1a7f45; }
+
+/* En móvil la barra sustituye al botón flotante y deja sitio al final de la página */
+@media (max-width: 767.98px) {
+  .btn-whatsapp { display: none; }
+  body { padding-bottom: 60px; }
+}
+
+/* Texto secundario del footer: gris claro con contraste AA sobre el fondo oscuro */
+.texto-footer { color: #b8bcc0; }
+
+/* Contraste AA: rojo y gris de marca algo más oscuros sobre fondos claros... */
+:root {
+  --bs-danger: #c82333;
+  --bs-danger-rgb: 200, 35, 51;
+  --bs-secondary-color: #5c636a;
+  --bs-secondary-rgb: 92, 99, 106;
+}
+/* ...y un rojo más claro cuando el fondo es oscuro */
+.bg-dark .text-danger,
+.bg-black .text-danger,
+footer .text-danger,
+.fixed-bottom.bg-dark .text-danger {
+  color: #ff6b6b !important;
+}

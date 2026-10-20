@@ -1,0 +1,369 @@
+{
+  "id": "WNqa5UZt62Io87Fg",
+  "name": "[DEV] JaFrauto — Avisos de cita por WhatsApp",
+  "active": false,
+  "nodes": [
+    {
+      "id": "evt-webhook",
+      "name": "Recibir evento de cita",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "webhookId": "8725782a-e64b-48c1-a866-c510267a059e",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jafrauto-citas",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "notes": "La API de JaFrauto lo llama en cada cambio de cita. Credencial Header Auth: nombre X-JaFrauto-Token, valor = N8N_WEBHOOK_TOKEN de la API."
+    },
+    {
+      "id": "evt-switch",
+      "name": "Tipo de evento",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        200
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "outputKey": "Creada",
+              "renameOutput": true,
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "18d21e3a-26da-4a9a-907c-579c0645efff",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.body.evento }}",
+                    "rightValue": "cita.creada"
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "Confirmada",
+              "renameOutput": true,
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5c48fa08-ee9f-4f65-b85b-5cb4b6293279",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.body.evento }}",
+                    "rightValue": "cita.confirmada"
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "Cambiada",
+              "renameOutput": true,
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "79ca1ba2-1709-4c03-a099-efb4bcb069ac",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.body.evento }}",
+                    "rightValue": "cita.cambiada"
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "Cancelada",
+              "renameOutput": true,
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "87ce7c26-082e-4d83-81b2-ad26e30cf635",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.body.evento }}",
+                    "rightValue": "cita.cancelada"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "notes": "cita.completada no envía nada por ahora (el aviso de 'coche listo' es de la Fase 5)."
+    },
+    {
+      "id": "evt-wa-0",
+      "name": "Avisar: cita recibida",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendTemplate",
+        "phoneNumberId": "CONFIGURAR_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.telefono.replace('+', '') }}",
+        "template": "jafrauto_cita_recibida|es",
+        "components": {
+          "component": [
+            {
+              "type": "body",
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.nombre }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ DateTime.fromISO($('Recibir evento de cita').item.json.body.cita.fecha).setLocale('es').toFormat(\"cccc d 'de' LLLL\") }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.hora }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.enlace_gestion }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "notes": "Plantilla de Meta 'jafrauto_cita_recibida' (es) con variables: nombre, fecha, hora, enlace."
+    },
+    {
+      "id": "evt-wa-1",
+      "name": "Avisar: cita confirmada",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        180
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendTemplate",
+        "phoneNumberId": "CONFIGURAR_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.telefono.replace('+', '') }}",
+        "template": "jafrauto_cita_confirmada|es",
+        "components": {
+          "component": [
+            {
+              "type": "body",
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.nombre }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ DateTime.fromISO($('Recibir evento de cita').item.json.body.cita.fecha).setLocale('es').toFormat(\"cccc d 'de' LLLL\") }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.hora }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "notes": "Plantilla de Meta 'jafrauto_cita_confirmada' (es) con variables: nombre, fecha, hora."
+    },
+    {
+      "id": "evt-wa-2",
+      "name": "Avisar: cita cambiada",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        360
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendTemplate",
+        "phoneNumberId": "CONFIGURAR_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.telefono.replace('+', '') }}",
+        "template": "jafrauto_cita_cambiada|es",
+        "components": {
+          "component": [
+            {
+              "type": "body",
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.nombre }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ DateTime.fromISO($('Recibir evento de cita').item.json.body.cita.fecha).setLocale('es').toFormat(\"cccc d 'de' LLLL\") }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.hora }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.enlace_gestion }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "notes": "Plantilla de Meta 'jafrauto_cita_cambiada' (es) con variables: nombre, fecha, hora, enlace."
+    },
+    {
+      "id": "evt-wa-3",
+      "name": "Avisar: cita cancelada",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        540
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendTemplate",
+        "phoneNumberId": "CONFIGURAR_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.telefono.replace('+', '') }}",
+        "template": "jafrauto_cita_cancelada|es",
+        "components": {
+          "component": [
+            {
+              "type": "body",
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "type": "text",
+                    "text": "={{ $('Recibir evento de cita').item.json.body.cita.cliente.nombre }}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "={{ DateTime.fromISO($('Recibir evento de cita').item.json.body.cita.fecha).setLocale('es').toFormat(\"cccc d 'de' LLLL\") }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "notes": "Plantilla de Meta 'jafrauto_cita_cancelada' (es) con variables: nombre, fecha."
+    }
+  ],
+  "connections": {
+    "Recibir evento de cita": {
+      "main": [
+        [
+          {
+            "node": "Tipo de evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de evento": {
+      "main": [
+        [
+          {
+            "node": "Avisar: cita recibida",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avisar: cita confirmada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avisar: cita cambiada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avisar: cita cancelada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid"
+  }
+}

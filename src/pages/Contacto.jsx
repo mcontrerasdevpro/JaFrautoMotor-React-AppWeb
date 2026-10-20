@@ -1,10 +1,14 @@
 import { TALLER } from "../config";
 import { MapaGoogle } from "../components/MapaGoogle";
 import { FormularioContacto } from "../components/FormularioContacto";
+import { Imagen } from "../components/Imagen";
+import { Seo } from "../components/Seo";
+import { Icono } from "../components/Icono";
 
 export const Contacto = () => {
     return (
         <div className="container py-4 py-lg-5 text-dark">
+            <Seo titulo="Contacto y cómo llegar" descripcion="JaFrauto Motor: Calle Bedmar 118, Polígono Los Olivares, 23009 Jaén. Lunes a viernes de 8:30 a 13:30 y de 16:00 a 19:00. Teléfono 953 121 814." ruta="/contacto" />
             {/* ENCABEZADO */}
             <div className="text-center text-md-start mb-4">
                 <h1 className="fw-bold display-4 mb-0 text-uppercase">
@@ -19,9 +23,11 @@ export const Contacto = () => {
                     style={{ borderRadius: "15px", border: "1px solid #ddd" }}>
 
                     {/* IMAGEN DE GRAN FORMATO */}
-                    <img
-                        src="/FachadaTaller.png"
-                        alt="Fachada Principal JaFrauto Motor"
+                    <Imagen
+                        nombre="fachada"
+                        prioridad
+                        alt="Fachada de la nave de JaFrauto Motor en el Polígono Los Olivares de Jaén"
+                        sizes="100vw"
                         className="w-100 d-block"
                         style={{
                             height: "auto",           /* Se adapta al ancho */
@@ -54,13 +60,13 @@ export const Contacto = () => {
                         <h2 className="h4 fw-bold mb-4 text-danger text-uppercase">Datos de Interés</h2>
 
                         <div className="mb-4">
-                            <h6 className="fw-bold text-uppercase small text-secondary">Dirección:</h6>
+                            <h3 className="h6 fw-bold text-uppercase small texto-footer">Dirección:</h3>
                             <p className="mb-0">{TALLER.direccion.calle}, Nave</p>
                             <p>{TALLER.direccion.zona}, {TALLER.direccion.cp} {TALLER.direccion.ciudad}</p>
                         </div>
 
                         <div className="mb-4">
-                            <h6 className="fw-bold text-uppercase small text-secondary">Teléfonos:</h6>
+                            <h3 className="h6 fw-bold text-uppercase small texto-footer">Teléfonos:</h3>
                             <p className="mb-1">
                                 <a href={TALLER.telefono.href} className="text-white fw-bold text-decoration-none">{TALLER.telefono.texto}</a> (taller)
                             </p>
@@ -72,7 +78,7 @@ export const Contacto = () => {
                         </div>
 
                         <div className="mb-4">
-                            <h6 className="fw-bold text-uppercase small text-secondary">Horario:</h6>
+                            <h3 className="h6 fw-bold text-uppercase small texto-footer">Horario:</h3>
                             <p className="mb-1">Lunes a Viernes:</p>
                             <p className="fw-bold text-danger">08:30 - 13:30 | 16:00 - 19:00</p>
                             <p className="mb-1">Sábados y domingos:</p>
@@ -85,7 +91,7 @@ export const Contacto = () => {
                             rel="noopener noreferrer"
                             className="btn btn-danger w-100 fw-bold rounded-0 py-2 mt-2 shadow"
                         >
-                            <i className="fa-solid fa-route me-2"></i>CÓMO LLEGAR
+                            <Icono nombre="route" className="me-2" />CÓMO LLEGAR
                         </a>
                     </div>
                 </div>
@@ -109,10 +115,10 @@ export const Contacto = () => {
                     <p className="text-secondary mb-2">Si lo prefieres:</p>
                     <div className="d-grid gap-2">
                         <a href={TALLER.telefono.href} className="btn btn-dark rounded-0 fw-bold">
-                            <i className="fa-solid fa-phone me-2"></i>LLAMAR AL {TALLER.telefono.texto}
+                            <Icono nombre="phone" className="me-2" />LLAMAR AL {TALLER.telefono.texto}
                         </a>
                         <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-success rounded-0 fw-bold">
-                            <i className="fa-brands fa-whatsapp me-2"></i>ESCRIBIR POR WHATSAPP
+                            <Icono nombre="whatsapp" className="me-2" />ESCRIBIR POR WHATSAPP
                         </a>
                     </div>
                 </div>

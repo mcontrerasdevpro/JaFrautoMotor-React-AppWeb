@@ -24,7 +24,10 @@ export async function apiFetch(path, { method = "GET", body, token } = {}) {
         if (resp.status === 401 && token) {
             window.dispatchEvent(new Event(EVENTO_SESION_CADUCADA));
         }
-        throw new Error(data?.msg || "Error en la petición al servidor");
+        const error = new Error(data?.msg || "Error en la petición al servidor");
+        error.status = resp.status;
+        error.code = data?.code;
+        throw error;
     }
 
     return data;

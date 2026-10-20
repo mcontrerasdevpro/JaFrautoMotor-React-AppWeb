@@ -1,4 +1,6 @@
 import { Outlet } from "react-router-dom";
+import { Head } from "vite-react-ssg";
+import fuenteTitulos from "@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url";
 import ScrollToTop from "../components/ScrollToTop";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
@@ -16,6 +18,11 @@ export const Layout = () => {
             minHeight: "100vh"
         }}>
             <ScrollToTop />
+
+            {/* Precarga de la fuente de títulos: evita que el titular de portada se redibuje tarde (LCP) */}
+            <Head>
+                <link rel="preload" href={fuenteTitulos} as="font" type="font/woff2" crossOrigin="" />
+            </Head>
 
             {/* Header pegajoso: ocupa su propio alto, así el contenido nunca queda debajo ni deja hueco */}
             <header className="sticky-top" style={{ zIndex: 4000 }}>

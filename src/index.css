@@ -1,29 +1,405 @@
-/* Logo del navbar: se adapta para que logo y hamburguesa quepan en una línea a 360 px */
+/* ==========================================================================
+   Identidad racing de JaFrauto Motor
+   Carbón + un único rojo de competición, títulos en Barlow Condensed 800
+   (único peso cargado, recto y cursiva); el texto corrido usa la fuente del sistema.
+   ========================================================================== */
+:root {
+  --jf-rojo: #e10600;          /* fondos y filos (texto blanco encima: 4.9:1) */
+  --jf-rojo-texto: #c40500;    /* texto rojo sobre fondo claro (AA) */
+  --jf-rojo-claro: #ff3b30;    /* texto rojo sobre fondo oscuro (AA) */
+  --jf-carbon: #0e0f11;
+  --jf-carbon-2: #16181b;
+  --jf-gris-claro: #c9ccd1;    /* texto secundario sobre oscuro */
+  --jf-papel: #f2f2f0;
+  --jf-whatsapp: #1a7f45;
+  --jf-titulos: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+
+  /* Bootstrap hereda la marca: rojo, oscuros, claros, tipografía y esquinas rectas */
+  --bs-danger: #e10600;
+  --bs-danger-rgb: 225, 6, 0;
+  --bs-dark-rgb: 14, 15, 17;
+  --bs-light-rgb: 242, 242, 240;
+  --bs-secondary-color: #5c636a;
+  --bs-secondary-rgb: 92, 99, 106;
+  --bs-body-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bs-border-radius: 0;
+  --bs-border-radius-sm: 0;
+  --bs-border-radius-lg: 0;
+  --bs-border-radius-xl: 0;
+  --bs-border-radius-xxl: 0;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+}
+h1, h2, .h1, .h2 { text-transform: uppercase; }
+
+/* Rojo de texto con contraste AA según el fondo */
+.text-danger { color: var(--jf-rojo-texto) !important; }
+.bg-dark .text-danger,
+.bg-black .text-danger,
+.seccion-oscura .text-danger,
+.ubicacion .text-danger,
+footer .text-danger,
+.fixed-bottom.bg-dark .text-danger {
+  color: var(--jf-rojo-claro) !important;
+}
+
+/* Botones: condensados, en mayúsculas y con el rojo de la marca */
+.btn {
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.btn-danger {
+  --bs-btn-bg: var(--jf-rojo);
+  --bs-btn-border-color: var(--jf-rojo);
+  --bs-btn-hover-bg: #b80500;
+  --bs-btn-hover-border-color: #b80500;
+  --bs-btn-active-bg: #9e0400;
+  --bs-btn-active-border-color: #9e0400;
+  --bs-btn-disabled-bg: var(--jf-rojo);
+  --bs-btn-disabled-border-color: var(--jf-rojo);
+}
+.btn-outline-danger {
+  --bs-btn-color: var(--jf-rojo-texto);
+  --bs-btn-border-color: var(--jf-rojo);
+  --bs-btn-hover-bg: var(--jf-rojo);
+  --bs-btn-hover-border-color: var(--jf-rojo);
+  --bs-btn-active-bg: #b80500;
+  --bs-btn-active-border-color: #b80500;
+}
+.btn-success {
+  --bs-btn-bg: var(--jf-whatsapp);
+  --bs-btn-border-color: var(--jf-whatsapp);
+  --bs-btn-hover-bg: #146638;
+  --bs-btn-hover-border-color: #146638;
+}
+
+/* Botón en ángulo: el corte va en un fondo aparte para no recortar el foco del teclado */
+.btn-racing {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 1.75rem;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 1.2rem;
+}
+.btn-racing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--jf-rojo);
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  transition: background-color 0.2s;
+}
+.btn-racing:hover,
+.btn-racing:focus-visible,
+.btn-racing.active { color: #fff; }
+.btn-racing:hover::before { background: #b80500; }
+.btn-racing:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.btn-racing--sm { min-height: 44px; padding: 0 1.25rem; font-size: 1.05rem; }
+
+.btn-borde {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 1.75rem;
+  border: 2px solid currentColor;
+  font-size: 1.2rem;
+}
+.btn-borde--claro { color: #fff; }
+.btn-borde--claro:hover { color: var(--jf-carbon); background: #fff; border-color: #fff; }
+.btn-success.btn-borde { border-color: var(--jf-whatsapp); }
+
+/* Logo */
 .logo-jafrauto {
-  font-size: clamp(1.3rem, 5.5vw, 1.75rem);
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  font-style: italic;
+  font-size: clamp(1.5rem, 6.5vw, 1.9rem);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #fff;
+}
+.logo-jafrauto span { color: var(--jf-rojo-claro); }
+
+/* ==========================================================================
+   Navegación
+   ========================================================================== */
+.navbar-racing {
+  background: var(--jf-carbon);
+  border-bottom: 3px solid var(--jf-rojo);
+}
+.navbar-racing .navbar-brand:hover { color: #fff; }
+.navbar-racing .nav-link {
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  color: var(--jf-gris-claro);
+}
+.navbar-racing .nav-link:hover,
+.navbar-racing .nav-link:focus-visible { color: #fff; }
+.navbar-racing .nav-link.active { color: #fff; box-shadow: inset 0 -3px 0 var(--jf-rojo); }
+.navbar-racing .navbar-toggler {
+  border: 2px solid #3a3d42;
+  padding: 0.45rem 0.6rem;
+}
+.navbar-racing .navbar-toggler:focus-visible { box-shadow: 0 0 0 3px #fff; }
+.navbar-racing__telefono {
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
   white-space: nowrap;
 }
+.navbar-racing__telefono .icono { color: var(--jf-rojo-claro); }
+.navbar-racing__telefono:hover { color: var(--jf-rojo-claro); }
 
-@media (min-width: 1200px) {
-  .logo-jafrauto {
-    font-size: 1.6rem;
+/* ==========================================================================
+   Secciones de la portada y piezas comunes
+   ========================================================================== */
+.seccion-oscura { background: var(--jf-carbon); color: #fff; }
+.seccion-oscura--2 { background: var(--jf-carbon-2); }
+.seccion-clara { background: var(--jf-papel); color: var(--jf-carbon); }
+.seccion { padding: 4rem 0; }
+@media (min-width: 992px) { .seccion { padding: 5.5rem 0; } }
+
+.texto-suave { color: var(--jf-gris-claro); }
+
+/* Antetítulo numerado: «01 · SERVICIOS» */
+.antetitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--jf-rojo-texto);
+}
+.seccion-oscura .antetitulo,
+.ubicacion .antetitulo { color: var(--jf-rojo-claro); }
+.antetitulo--raya::before {
+  content: "";
+  width: 28px;
+  height: 3px;
+  background: var(--jf-rojo);
+}
+.titulo-seccion { font-size: clamp(2.1rem, 5vw, 3.4rem); margin-bottom: 0; }
+
+.enlace-flecha {
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--jf-rojo-texto);
+}
+.seccion-oscura .enlace-flecha { color: var(--jf-rojo-claro); }
+.enlace-flecha:hover { text-decoration: underline; }
+
+/* Hero */
+.hero-racing {
+  position: relative;
+  overflow: hidden;
+  background: var(--jf-carbon);
+  color: #fff;
+}
+.hero-racing__foto img {
+  display: block;
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  clip-path: polygon(0 0, 100% 0, 100% 84%, 0 100%);
+}
+.hero-racing__contenido { position: relative; padding: 1.25rem 0 2rem; }
+.hero-racing__titulo {
+  margin: 0.25rem 0 1rem;
+  font-size: clamp(2.9rem, 12vw, 5.25rem);
+  line-height: 0.92;
+}
+.hero-racing__titulo em { font-style: italic; color: var(--jf-rojo-claro); }
+.hero-racing__antetitulo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+  font-size: 1rem;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  color: var(--jf-rojo-claro);
+}
+.hero-racing__antetitulo::before {
+  content: "";
+  width: 28px;
+  height: 3px;
+  background: var(--jf-rojo);
+}
+.hero-racing__texto { max-width: 540px; font-size: 1.1rem; line-height: 1.6; color: var(--jf-gris-claro); }
+.hero-racing__acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.hero-racing__acciones .btn-racing,
+.hero-racing__acciones .btn-borde { padding: 0 0.75rem; font-size: 1.15rem; }
+
+@media (min-width: 992px) {
+  .hero-racing { min-height: 600px; display: flex; align-items: center; }
+  .hero-racing__foto { position: absolute; top: 0; right: 0; width: 64%; height: 100%; }
+  .hero-racing__foto img { height: 100%; clip-path: none; }
+  .hero-racing::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(100deg, var(--jf-carbon) 0%, var(--jf-carbon) 40%, rgba(14, 15, 17, 0.85) 52%, rgba(14, 15, 17, 0.1) 78%, rgba(14, 15, 17, 0.3) 100%);
   }
+  .hero-racing::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 47%;
+    z-index: 2;
+    width: 10px;
+    background: var(--jf-rojo);
+    transform: skewX(-14deg);
+  }
+  .hero-racing__contenido { z-index: 3; width: 100%; padding: 5rem 0; }
+  .hero-racing__acciones { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+  .hero-racing__acciones .btn-racing,
+  .hero-racing__acciones .btn-borde { min-height: 56px; padding: 0 1.9rem; font-size: 1.3rem; }
 }
 
+/* Banda roja de datos */
+.banda-datos { background: var(--jf-rojo); color: #fff; }
+.banda-datos__lista { display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; list-style: none; }
+.banda-datos__item { padding: 0.9rem 1rem; border-left: 1px solid rgba(255, 255, 255, 0.3); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+.banda-datos__item:nth-child(odd) { border-left: 0; }
+.banda-datos__item strong { display: block; font-family: var(--jf-titulos); font-weight: 800; font-size: 1.6rem; line-height: 1; text-transform: uppercase; }
+.banda-datos__item span { font-size: 0.9rem; }
+@media (min-width: 992px) {
+  .banda-datos__lista { grid-template-columns: repeat(4, 1fr); }
+  .banda-datos__item,
+  .banda-datos__item:nth-child(odd) { padding: 1.4rem 1.25rem; border-bottom: 0; border-left: 1px solid rgba(255, 255, 255, 0.3); }
+  .banda-datos__item:last-child { border-right: 1px solid rgba(255, 255, 255, 0.3); }
+  .banda-datos__item strong { font-size: 2.1rem; }
+}
+
+/* Tarjeta de servicio con foto a sangre */
+.tarjeta-foto {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  min-height: 190px;
+  overflow: hidden;
+  background: var(--jf-carbon);
+  color: #fff;
+  text-decoration: none;
+}
+.tarjeta-foto picture,
+.tarjeta-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tarjeta-foto img { transition: transform 0.4s ease; }
+.tarjeta-foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 15, 17, 0) 30%, rgba(14, 15, 17, 0.92) 100%);
+}
+.tarjeta-foto__texto {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border-bottom: 4px solid var(--jf-rojo);
+}
+.tarjeta-foto__titulo { display: block; font-family: var(--jf-titulos); font-weight: 800; font-size: 1.5rem; line-height: 1; text-transform: uppercase; }
+.tarjeta-foto__resumen { display: block; margin-top: 0.35rem; font-size: 0.95rem; color: #e3e5e8; }
+.tarjeta-foto:hover { color: #fff; }
+.tarjeta-foto:hover img { transform: scale(1.04); }
+.tarjeta-foto:focus-visible { outline: 3px solid var(--jf-rojo); outline-offset: 3px; }
+@media (min-width: 992px) { .tarjeta-foto { min-height: 320px; } .tarjeta-foto__titulo { font-size: 1.75rem; } }
+
+.etiqueta-servicio {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  background: var(--jf-carbon);
+  color: #fff;
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.etiqueta-servicio:hover,
+.etiqueta-servicio:focus-visible { background: var(--jf-rojo); color: #fff; }
+
+/* Pasos numerados */
+.paso { height: 100%; padding-top: 1rem; border-top: 3px solid var(--jf-rojo); }
+.paso__numero { display: block; font-family: var(--jf-titulos); font-weight: 800; font-style: italic; font-size: 3.6rem; line-height: 0.9; color: var(--jf-rojo-claro); }
+.paso__titulo { margin: 0.5rem 0; font-size: 1.5rem; text-transform: uppercase; }
+
+/* Foto cortada en diagonal (sección del taller) */
+.foto-diagonal { position: relative; }
+.foto-diagonal img { display: block; width: 100%; height: 300px; object-fit: cover; }
+.foto-diagonal::after { content: ""; position: absolute; left: 0; bottom: -10px; width: 120px; height: 10px; background: var(--jf-rojo); }
+@media (min-width: 992px) {
+  .foto-diagonal img { height: 440px; clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%); }
+}
+
+/* Dónde estamos: fachada de fondo */
+.ubicacion { position: relative; overflow: hidden; background: var(--jf-carbon); color: #fff; }
+.ubicacion__foto img { display: block; width: 100%; height: 220px; object-fit: cover; }
+.ubicacion__contenido { position: relative; padding: 2rem 0 3rem; border-top: 4px solid var(--jf-rojo); }
+@media (min-width: 992px) {
+  .ubicacion { min-height: 460px; display: flex; align-items: center; }
+  .ubicacion__foto { position: absolute; inset: 0; }
+  .ubicacion__foto img { height: 100%; }
+  .ubicacion::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(14, 15, 17, 0.96) 0%, rgba(14, 15, 17, 0.9) 42%, rgba(14, 15, 17, 0.15) 75%);
+  }
+  .ubicacion__contenido { z-index: 2; width: 100%; padding: 4.5rem 0; border-top: 0; }
+}
+
+/* Sellos de confianza */
+.sello {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  height: 100%;
+  padding: 1.1rem;
+  background: #fff;
+  border-left: 4px solid var(--jf-rojo);
+}
+
+/* ==========================================================================
+   Utilidades existentes
+   ========================================================================== */
 .title {
   font-size: calc(1.5rem + 3vw);
   text-align: center;
   margin-top: 20px;
-}
-
-@keyframes pulse-red {
-  0% { box-shadow: 0 0 0 0 rgba(250, 6, 6, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(250, 6, 6, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(250, 6, 6, 0); }
-}
-
-.pulse-urgente {
-  animation: pulse-red 2s infinite;
 }
 
 /* Iconos SVG (componente Icono): mismo tamaño y alineación que los de Font Awesome */
@@ -41,7 +417,7 @@
 .icono.fa-4x { font-size: 4em; }
 
 /* Enlaces del footer */
-.hover-red:hover { color: #fa0606 !important; transition: 0.3s; }
+.hover-red:hover { color: var(--jf-rojo-claro) !important; transition: 0.3s; }
 
 /* Botón flotante de WhatsApp */
 .btn-whatsapp {
@@ -63,25 +439,6 @@
 }
 .btn-whatsapp:hover { transform: scale(1.1); color: white; }
 
-/* Portada: botón con latido y hero */
-@keyframes pulse-blanco-fuerte {
-  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8); }
-  70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-}
-.boton-latido {
-  animation: pulse-blanco-fuerte 2s infinite !important;
-  border: 2px solid white !important;
-  position: relative;
-  z-index: 10;
-}
-/* Ajuste para que el rasgado no ensanche la web en móvil */
-.hero-section { overflow: hidden; position: relative; min-height: 85vh; background-color: #1a1a1a; }
-.hero-capa { background: rgba(0, 0, 0, 0.6); }
-@media (min-width: 992px) {
-  .hero-capa { background: linear-gradient(115deg, rgba(26, 26, 26, 1) 0%, rgba(26, 26, 26, 0.9) 45%, rgba(26, 26, 26, 0) 70%); }
-}
-
 /* Barra fija de acciones en móvil (Llamar · WhatsApp · Pedir cita) */
 .barra-movil {
   position: fixed;
@@ -90,7 +447,8 @@
   bottom: 0;
   z-index: 5000;
   display: flex;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  background: #08090a;
+  border-top: 3px solid var(--jf-rojo);
 }
 .barra-movil__accion {
   flex: 1;
@@ -101,36 +459,25 @@
   gap: 2px;
   min-height: 60px;
   color: #fff;
-  font-weight: 700;
-  font-size: 0.8rem;
+  font-family: var(--jf-titulos);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
 }
-.barra-movil__accion .icono { font-size: 1.3rem; }
+.barra-movil__accion .icono { font-size: 1.25rem; }
 .barra-movil__accion:hover,
 .barra-movil__accion:focus { color: #fff; }
-.barra-movil__whatsapp { background: #1a7f45; }
+.barra-movil__whatsapp { background: var(--jf-whatsapp); }
+.barra-movil__cita { background: var(--jf-rojo); }
 
 /* En móvil la barra sustituye al botón flotante y deja sitio al final de la página */
 @media (max-width: 767.98px) {
   .btn-whatsapp { display: none; }
-  body { padding-bottom: 60px; }
+  body { padding-bottom: 63px; }
 }
 
-/* Texto secundario del footer: gris claro con contraste AA sobre el fondo oscuro */
+/* Footer */
+.footer-racing { background: #08090a; border-top: 3px solid var(--jf-rojo); }
 .texto-footer { color: #b8bcc0; }
-
-/* Contraste AA: rojo y gris de marca algo más oscuros sobre fondos claros... */
-:root {
-  --bs-danger: #c82333;
-  --bs-danger-rgb: 200, 35, 51;
-  --bs-secondary-color: #5c636a;
-  --bs-secondary-rgb: 92, 99, 106;
-}
-/* ...y un rojo más claro cuando el fondo es oscuro */
-.bg-dark .text-danger,
-.bg-black .text-danger,
-footer .text-danger,
-.fixed-bottom.bg-dark .text-danger {
-  color: #ff6b6b !important;
-}

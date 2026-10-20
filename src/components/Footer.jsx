@@ -6,14 +6,14 @@ import { abrirPreferenciasCookies } from "../hooks/useConsentimiento";
 import { Icono } from "./Icono";
 
 export const Footer = () => (
-    <footer className="bg-dark text-white pt-5 pb-2 mt-auto" style={{ borderTop: "4px solid #fa0606" }}>
+    <footer className="footer-racing text-white pt-5 pb-2 mt-auto">
         <div className="container text-center text-md-start">
             <div className="row g-4 align-items-start">
 
                 {/* COLUMNA 1: IDENTIDAD (Un poco más estrecha) */}
                 <div className="col-md-3">
-                    <p className="h4 fw-bold mb-3 text-uppercase">
-                        JAFRAUTO<span className="text-danger">MOTOR</span>
+                    <p className="logo-jafrauto mb-3">
+                        JAFRAUTO<span>MOTOR</span>
                     </p>
                     <p className="small texto-footer mb-4">
                         Tu taller de confianza en Jaén. Calidad y rapidez en el Polígono de los Olivares.

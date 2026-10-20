@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Contacto = () => {
     return (
         <div className="container mt-1 pt-4 text-dark">

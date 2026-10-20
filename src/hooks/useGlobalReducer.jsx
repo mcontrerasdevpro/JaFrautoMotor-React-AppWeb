@@ -1,15 +1,14 @@
-// Import necessary hooks and functions from React.
 import { useContext, useReducer, createContext, useEffect } from "react";
+import PropTypes from "prop-types";
 import storeReducer, { initialStore } from "../store";
 
 const StoreContext = createContext();
 
 export function StoreProvider({ children }) {
-    // 1. Inicializamos con lo que haya en localStorage (si existe) gracias a tu función initialStore()
+    // Arrancamos con lo que haya guardado en localStorage (si existe)
     const [store, dispatch] = useReducer(storeReducer, initialStore());
 
-    // 2. MAGIA: Cada vez que el store cambie (añadas un favorito o cargues personajes), 
-    // lo guardamos automáticamente en el navegador.
+    // Cada vez que cambia el store lo guardamos en el navegador
     useEffect(() => {
         localStorage.setItem("taller_app_data", JSON.stringify(store));
     }, [store]);
@@ -21,6 +20,11 @@ export function StoreProvider({ children }) {
     );
 }
 
+StoreProvider.propTypes = {
+    children: PropTypes.node
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
 export default function useGlobalReducer() {
     const context = useContext(StoreContext);
     if (!context) {

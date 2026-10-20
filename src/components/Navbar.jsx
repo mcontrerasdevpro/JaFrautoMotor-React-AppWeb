@@ -7,7 +7,6 @@ export const Navbar = () => {
   const navigate = useNavigate(); // <--- ESTA ES LA LÍNEA QUE FALTABA
   
   const [busqueda, setBusqueda] = useState("");
-  const totalUrgentes = store?.urgente?.length || 0;
   const totalEuros = store.urgente.reduce((acc, item) => acc + (Number(item.precio) || 0), 0);
 
   const handleBusqueda = (e) => {

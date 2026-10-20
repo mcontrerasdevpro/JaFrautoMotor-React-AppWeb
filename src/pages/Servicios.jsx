@@ -23,8 +23,6 @@ export const Servicios = () => {
         dispatch({ type: 'toggle_urgente', payload: servicio });
     };
 
-    const totalEuros = store.urgente.reduce((acc, item) => acc + item.precio, 0);
-
      return (
         <div className="container mt-1 pt-4 text-dark">
             <div className="text-center mb-5">
@@ -76,7 +74,7 @@ export const Servicios = () => {
                 ) : (
                     /* Mensaje por si no hay resultados */
                     <div className="col-12 text-center py-5">
-                        <h3 className="text-muted">No hay resultados para "{busqueda}"</h3>
+                        <h3 className="text-muted">No hay resultados para &quot;{busqueda}&quot;</h3>
                         <button className="btn btn-outline-danger mt-3" onClick={() => dispatch({ type: 'set_busqueda', payload: "" })}>
                             Limpiar búsqueda
                         </button>

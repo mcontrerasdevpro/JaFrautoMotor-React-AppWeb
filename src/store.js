@@ -37,7 +37,7 @@ export default function storeReducer(store, action = {}) {
         cita_programada: { ...store.cita_programada, ...action.payload } 
     };
 
-    case 'toggle_urgente':
+    case 'toggle_urgente': {
       const item = action.payload;
       const existe = store.urgente.some(serv => serv.id === item.id);
 
@@ -47,6 +47,7 @@ export default function storeReducer(store, action = {}) {
           ? store.urgente.filter(serv => serv.id !== item.id)
           : [...store.urgente, item]
       };
+    }
 
     case 'set_usuario':
       return { ...store, usuario: action.payload.user, token: action.payload.token };

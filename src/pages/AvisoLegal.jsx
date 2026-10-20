@@ -1,5 +1,3 @@
-import React from "react";
-
 export const AvisoLegal = () => {
     return (
         <div className="container mt-1 pt-5 text-dark pb-5">

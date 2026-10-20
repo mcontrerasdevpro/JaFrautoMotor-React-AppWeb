@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
 
@@ -70,6 +71,19 @@ const FilaCliente = ({ cliente, citasDelCliente, token, onNotasGuardadas }) => {
             )}
         </>
     );
+};
+
+FilaCliente.propTypes = {
+    cliente: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string,
+        email: PropTypes.string,
+        phone: PropTypes.string,
+        notes: PropTypes.string
+    }).isRequired,
+    citasDelCliente: PropTypes.array.isRequired,
+    token: PropTypes.string,
+    onNotasGuardadas: PropTypes.func.isRequired
 };
 
 export const PanelInterno = () => {

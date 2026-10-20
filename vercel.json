@@ -5,14 +5,14 @@
     "cleanUrls": true,
     "trailingSlash": false,
     "rewrites": [
-        { "source": "/login", "destination": "/app-shell.html" },
-        { "source": "/registro", "destination": "/app-shell.html" },
-        { "source": "/gestion", "destination": "/app-shell.html" },
-        { "source": "/reservar", "destination": "/app-shell.html" },
-        { "source": "/urgente", "destination": "/app-shell.html" },
-        { "source": "/mi-cuenta", "destination": "/app-shell.html" },
-        { "source": "/panel-interno", "destination": "/app-shell.html" },
-        { "source": "/cita/:token", "destination": "/app-shell.html" }
+        { "source": "/login", "destination": "/app-shell" },
+        { "source": "/registro", "destination": "/app-shell" },
+        { "source": "/gestion", "destination": "/app-shell" },
+        { "source": "/reservar", "destination": "/app-shell" },
+        { "source": "/urgente", "destination": "/app-shell" },
+        { "source": "/mi-cuenta", "destination": "/app-shell" },
+        { "source": "/panel-interno", "destination": "/app-shell" },
+        { "source": "/cita/:token", "destination": "/app-shell" }
     ],
     "headers": [
         {

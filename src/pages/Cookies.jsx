@@ -1,7 +1,9 @@
 import { abrirPreferenciasCookies } from "../hooks/useConsentimiento";
+import { Seo } from "../components/Seo";
 
 export const Cookies = () => (
     <div className="container py-4 py-lg-5 text-dark" style={{ minHeight: "80vh" }}>
+        <Seo titulo="Política de cookies" descripcion="Qué cookies y almacenamiento usa la web de JaFrauto Motor y cómo cambiar tu elección." ruta="/cookies" noindex />
         <h1 className="fw-bold border-bottom border-danger pb-3 mb-4 text-uppercase">
             Política de <span className="text-danger">Cookies</span>
         </h1>

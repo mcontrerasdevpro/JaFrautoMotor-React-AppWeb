@@ -15,6 +15,8 @@ export const TALLER = {
     direccion: { calle: "Calle Bedmar, 118", zona: "Pol. Los Olivares", cp: "23009", ciudad: "Jaén" },
     comoLlegar: "https://www.google.com/maps/dir/?api=1&destination=" +
         encodeURIComponent("JaFrauto Motor, Calle Bedmar 118, 23009 Jaén"),
+    // Hasta tener el enlace de la ficha de Google Business: búsqueda del taller en Google Maps
+    resenasGoogle: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("JaFrauto Motor Calle Bedmar 118 Jaén"),
     mapaEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.864032769776!2d-3.7903449!3d37.7932261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6dd785dd31629f%3A0xdb2725b0e85794e2!2sJafrautomotor!5e0!3m2!1ses!2ses!4v1773799069849!5m2!1ses!2ses"
 };
 
@@ -22,4 +24,12 @@ export const TALLER = {
 export const FRANJAS_CITA = {
     "Mañana": ["08:30", "10:00", "11:30", "13:00"],
     "Tarde": ["16:00", "17:30"]
+};
+
+// Dominio canónico y si la web debe indexarse. La demo de Vercel no se indexa
+// hasta migrar jafrautomotor.com (VITE_INDEXAR=true en el despliegue final).
+export const SITIO = {
+    url: (import.meta.env.VITE_SITE_URL || "https://jafrautomotor.com").replace(/\/$/, ""),
+    indexar: import.meta.env.VITE_INDEXAR === "true",
+    imagenSocial: "/img/portada-1200.jpg"
 };

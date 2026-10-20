@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { apiFetch } from "../../api";
 import { textoFecha } from "../../utils/fechas";
+import { Icono } from "../Icono";
 
 // Pestaña "Agenda" del panel: plazas por franja y días sin citas (festivos, vacaciones)
 export const PestanaAgenda = ({ token }) => {
@@ -118,7 +119,7 @@ export const PestanaAgenda = ({ token }) => {
                                     </span>
                                     <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => desbloquear(d.id)}
                                         aria-label={`Desbloquear ${d.date}`}>
-                                        <i className="fa-solid fa-unlock"></i>
+                                        <Icono nombre="unlock" />
                                     </button>
                                 </li>
                             ))}

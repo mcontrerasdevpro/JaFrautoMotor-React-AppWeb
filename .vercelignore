@@ -1,0 +1,11 @@
+# Vercel solo publica el front. El backend (Flask) se despliega aparte (Render / VPS):
+# si estos archivos llegan a Vercel, detecta Flask e intenta instalar requirements.txt.
+*.py
+requirements.txt
+migrations/
+venv/
+__pycache__/
+
+# No hacen falta para el build del front
+fotos/
+docs/

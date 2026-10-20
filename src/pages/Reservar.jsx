@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
@@ -7,6 +7,11 @@ import { TALLER } from "../config";
 import { CasillaPrivacidad } from "../components/CasillaPrivacidad";
 import { SelectorHueco } from "../components/reserva/SelectorHueco";
 import { textoFecha } from "../utils/fechas";
+import { paginaPorSlug } from "../data/paginasServicio";
+import { Seo } from "../components/Seo";
+import { Icono } from "../components/Icono";
+
+const ID_DIAGNOSIS = 3;
 
 const PASOS = ["Problema", "Servicio", "Día y hora", "Tus datos", "Confirmar"];
 
@@ -26,13 +31,24 @@ export const Reservar = () => {
     const { store, dispatch } = useGlobalReducer();
     const usuario = store.usuario;
 
-    const [paso, setPaso] = useState(store.urgente.length > 0 ? 2 : 1);
+    // Desde una página de servicio llega ?servicio=<slug>: servicio ya elegido (o el motivo
+    // escrito si no está en el catálogo, con una revisión/diagnosis como servicio)
+    const [params] = useSearchParams();
+    const [desdeServicio] = useState(() => paginaPorSlug(params.get("servicio") || ""));
+    const idsIniciales = desdeServicio
+        ? [desdeServicio.servicioId ?? ID_DIAGNOSIS]
+        : store.urgente.map((s) => s.id).filter(Number.isInteger);
+
+    const [paso, setPaso] = useState(idsIniciales.length > 0 ? 2 : 1);
     const [apiDespierta, setApiDespierta] = useState(true);
     const [catalogo, setCatalogo] = useState(store.servicios);
-    const [sintoma, setSintoma] = useState("");
-    const [sugerencia, setSugerencia] = useState(null);
+    const [sintoma, setSintoma] = useState(desdeServicio?.motivo || "");
+    const [sugerencia, setSugerencia] = useState(desdeServicio?.motivo ? {
+        urgente: false,
+        mensaje: `Has pedido: ${desdeServicio.motivo}. Lo anotamos en la cita y Francisco o Jacinto revisarán el coche antes de darte presupuesto.`
+    } : null);
     const [usoAsistente, setUsoAsistente] = useState(false);
-    const [seleccion, setSeleccion] = useState(() => store.urgente.map((s) => s.id).filter(Number.isInteger));
+    const [seleccion, setSeleccion] = useState(idsIniciales);
     const [hueco, setHueco] = useState(null);
     const [recargarHuecos, setRecargarHuecos] = useState(0);
     const [datos, setDatos] = useState(DATOS_VACIOS);
@@ -132,6 +148,7 @@ export const Reservar = () => {
 
     return (
         <div className="container py-4 py-lg-5 text-dark" style={{ maxWidth: "860px" }}>
+            <Seo titulo="Pide cita en el taller" descripcion="Reserva tu cita en JaFrauto Motor (Jaén) en unos pasos y sin crear una cuenta." ruta="/reservar" noindex />
             <h1 className="fw-bold text-uppercase mb-1">Pide tu <span className="text-danger">cita</span></h1>
             <p className="text-secondary mb-4">En unos pasos y sin necesidad de crear una cuenta. Si es urgente, llámanos al{" "}
                 <a href={TALLER.telefono.href} className="fw-bold text-danger">{TALLER.telefono.texto}</a>.</p>
@@ -194,17 +211,17 @@ export const Reservar = () => {
                         <h2 className="h4 fw-bold mb-3">¿Qué servicio necesitas?</h2>
                         {sugerencia && (
                             <div className={`alert ${sugerencia.urgente ? "alert-danger" : "alert-secondary"} small`} role="status">
-                                <i className={`fa-solid ${sugerencia.urgente ? "fa-triangle-exclamation" : "fa-lightbulb"} me-2`}></i>
+                                <Icono nombre={sugerencia.urgente ? "triangle-exclamation" : "lightbulb"} className="me-2" />
                                 {sugerencia.mensaje}
                                 {sugerencia.urgente && (
                                     <a href={TALLER.telefono.href} className="btn btn-danger btn-sm fw-bold rounded-0 ms-md-2 mt-2 mt-md-0">
-                                        <i className="fa-solid fa-phone me-1"></i>LLAMAR AHORA
+                                        <Icono nombre="phone" className="me-1" />LLAMAR AHORA
                                     </a>
                                 )}
                             </div>
                         )}
                         {promociones.length > 0 && (
-                            <p className="small text-success fw-bold"><i className="fa-solid fa-tag me-1"></i>Promoción: {promociones.join(", ")}</p>
+                            <p className="small text-success fw-bold"><Icono nombre="tag" className="me-1" />Promoción: {promociones.join(", ")}</p>
                         )}
                         <div className="row g-2 mb-3">
                             {catalogo.map((s) => {
@@ -312,7 +329,7 @@ export const Reservar = () => {
                         </dl>
                         <div className="d-flex flex-column flex-sm-row gap-2 justify-content-between">
                             <button type="button" className="btn btn-outline-dark rounded-0" onClick={() => setPaso(4)}>
-                                <i className="fa-solid fa-chevron-left me-1"></i>ATRÁS
+                                <Icono nombre="chevron-left" className="me-1" />ATRÁS
                             </button>
                             <button type="button" className="btn btn-danger fw-bold rounded-0 px-4 py-2" onClick={confirmar} disabled={cargando}>
                                 {cargando ? "Reservando..." : "CONFIRMAR CITA"}
@@ -328,11 +345,11 @@ export const Reservar = () => {
 const NavegacionPasos = ({ atras, siguiente, habilitado, enviar = false }) => (
     <div className="d-flex flex-column flex-sm-row gap-2 justify-content-between">
         <button type="button" className="btn btn-outline-dark rounded-0" onClick={atras}>
-            <i className="fa-solid fa-chevron-left me-1"></i>ATRÁS
+            <Icono nombre="chevron-left" className="me-1" />ATRÁS
         </button>
         <button type={enviar ? "submit" : "button"} className="btn btn-danger fw-bold rounded-0 px-4"
             onClick={enviar ? undefined : siguiente} disabled={!habilitado}>
-            SIGUIENTE<i className="fa-solid fa-chevron-right ms-1"></i>
+            SIGUIENTE<Icono nombre="chevron-right" className="ms-1" />
         </button>
     </div>
 );
@@ -371,17 +388,17 @@ const CitaConfirmada = ({ confirmada, invitado, emailInicial }) => {
     return (
         <div className="container py-4 py-lg-5 text-dark" style={{ maxWidth: "720px" }}>
             <div className="card border-0 shadow-lg p-4 p-md-5 text-center rounded-0 border-top border-5 border-success">
-                <i className="fa-solid fa-calendar-check fa-4x text-success mb-3"></i>
+                <Icono nombre="calendar-check" className="fa-4x text-success mb-3" />
                 <h1 className="h2 fw-bold">¡Cita registrada!</h1>
                 <p className="lead mb-1">{textoFecha(cita.date)} a las {cita.time}</p>
                 <p className="text-secondary mb-1">{(cita.services || []).map((s) => s.name).join(", ")} · {cita.vehicle} {cita.plate}</p>
                 <p className="text-secondary">Francisco o Jacinto te contactarán para confirmarla.{cita.email && " Te hemos enviado un email con los detalles."}</p>
                 <div className="d-flex flex-column flex-sm-row gap-2 justify-content-center my-3">
                     <Link to={enlace} className="btn btn-outline-dark rounded-0 fw-bold">
-                        <i className="fa-solid fa-pen-to-square me-2"></i>CAMBIAR O CANCELAR
+                        <Icono nombre="pen-to-square" className="me-2" />CAMBIAR O CANCELAR
                     </Link>
                     <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-success rounded-0 fw-bold">
-                        <i className="fa-brands fa-whatsapp me-2"></i>ESCRIBIRNOS
+                        <Icono nombre="whatsapp" className="me-2" />ESCRIBIRNOS
                     </a>
                 </div>
                 <p className="small text-muted mb-0">
@@ -392,7 +409,7 @@ const CitaConfirmada = ({ confirmada, invitado, emailInicial }) => {
             {invitado && (
                 <div className="card border-0 shadow p-4 mt-4 rounded-0">
                     {estadoCuenta.creada ? (
-                        <p className="mb-0 text-success fw-bold"><i className="fa-solid fa-circle-check me-2"></i>Cuenta creada. Verás esta cita en <Link to="/mi-cuenta">Mi cuenta</Link>.</p>
+                        <p className="mb-0 text-success fw-bold"><Icono nombre="circle-check" className="me-2" />Cuenta creada. Verás esta cita en <Link to="/mi-cuenta">Mi cuenta</Link>.</p>
                     ) : (
                         <form onSubmit={crearCuenta}>
                             <h2 className="h5 fw-bold">¿Quieres ver tus citas cuando quieras? <span className="text-muted fw-normal small">(opcional)</span></h2>

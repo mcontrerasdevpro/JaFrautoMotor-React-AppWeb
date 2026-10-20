@@ -20,7 +20,7 @@ export const Taller = () => {
                         <div className="bg-dark text-white p-3 shadow d-inline-block border-start border-4 border-danger ms-2"
                             style={{ minWidth: "160px", transform: "skewX(-10deg)" }}> {/* Inclinación estilo Racing */}
                             <div style={{ transform: "skewX(10deg)" }}> {/* Revertimos inclinación en el texto para que se lea recto */}
-                                <h4 className="fw-bold mb-0 text-danger text-center">+15 AÑOS</h4>
+                                <p className="h4 fw-bold mb-0 text-danger text-center">+15 AÑOS</p>
                                 <p className="small mb-0 text-uppercase fw-bold text-center" style={{ fontSize: "0.6rem", letterSpacing: "1px" }}>
                                     Experiencia Real
                                 </p>
@@ -44,8 +44,6 @@ export const Taller = () => {
                             nombre="taller"
                             alt="Interior del taller JaFrauto Motor con elevadores y mecánicos trabajando"
                             sizes="(min-width: 992px) 50vw, 100vw"
-                            width={1197}
-                            height={1059}
                             className="img-fluid shadow-lg"
                             style={{
                                 borderLeft: "8px solid #fa0606",
@@ -63,21 +61,21 @@ export const Taller = () => {
                 <div className="col-md-4">
                     <div className="p-4 border-0 shadow-sm bg-light h-100">
                         <Icono nombre="microchip" className="fa-3x text-danger mb-3" />
-                        <h5 className="fw-bold text-uppercase">Alta Tecnología</h5>
+                        <h2 className="h5 fw-bold text-uppercase">Alta Tecnología</h2>
                         <p className="small text-muted">Equipos de diagnosis multimarca para detectar averías con precisión quirúrgica.</p>
                     </div>
                 </div>
                 <div className="col-md-4">
                     <div className="p-4 border-0 shadow-sm bg-danger text-white h-100">
                         <Icono nombre="handshake-angle" className="fa-3x mb-3" />
-                        <h5 className="fw-bold text-uppercase text-white">Transparencia</h5>
+                        <h2 className="h5 fw-bold text-uppercase text-white">Transparencia</h2>
                         <p className="small">Presupuestos cerrados y explicación detallada de cada reparación. Sin sorpresas en la factura.</p>
                     </div>
                 </div>
                 <div className="col-md-4">
                     <div className="p-4 border-0 shadow-sm bg-light h-100">
                         <Icono nombre="clock" className="fa-3x text-danger mb-3" />
-                        <h5 className="fw-bold text-uppercase">Rapidez</h5>
+                        <h2 className="h5 fw-bold text-uppercase">Rapidez</h2>
                         <p className="small text-muted">Sabemos que tu tiempo es oro. Optimizamos procesos para entregas en tiempo récord.</p>
                     </div>
                 </div>

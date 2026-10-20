@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
-import anchosPorFoto from "../data/imagenes.json";
+import fotos from "../data/imagenes.json";
 
 // Foto optimizada (AVIF y WebP en varios anchos, generada con `npm run imagenes`).
 // `prioridad` para la imagen principal de la página (LCP): carga inmediata y alta prioridad.
+// width/height van siempre (proporción real de la foto) para reservar el hueco y evitar saltos.
 export const Imagen = ({ nombre, alt, sizes = "100vw", prioridad = false, className, style, width, height }) => {
-    const anchos = anchosPorFoto[nombre];
-    if (!anchos) return null;
+    const foto = fotos[nombre];
+    if (!foto) return null;
+    const { anchos } = foto;
     const srcset = (formato) => anchos.map((a) => `/img/${nombre}-${a}.${formato} ${a}w`).join(", ");
     const mayor = anchos[anchos.length - 1];
 
@@ -18,8 +20,8 @@ export const Imagen = ({ nombre, alt, sizes = "100vw", prioridad = false, classN
                 alt={alt}
                 className={className}
                 style={style}
-                width={width}
-                height={height}
+                width={width ?? foto.ancho}
+                height={height ?? foto.alto}
                 loading={prioridad ? "eager" : "lazy"}
                 decoding={prioridad ? "sync" : "async"}
                 // React 18 aún no reconoce fetchPriority: en minúsculas llega tal cual al HTML

@@ -25,6 +25,7 @@ export const Contacto = () => {
                     {/* IMAGEN DE GRAN FORMATO */}
                     <Imagen
                         nombre="fachada"
+                        prioridad
                         alt="Fachada de la nave de JaFrauto Motor en el Polígono Los Olivares de Jaén"
                         sizes="100vw"
                         className="w-100 d-block"
@@ -59,13 +60,13 @@ export const Contacto = () => {
                         <h2 className="h4 fw-bold mb-4 text-danger text-uppercase">Datos de Interés</h2>
 
                         <div className="mb-4">
-                            <h6 className="fw-bold text-uppercase small text-secondary">Dirección:</h6>
+                            <h3 className="h6 fw-bold text-uppercase small texto-footer">Dirección:</h3>
                             <p className="mb-0">{TALLER.direccion.calle}, Nave</p>
                             <p>{TALLER.direccion.zona}, {TALLER.direccion.cp} {TALLER.direccion.ciudad}</p>
                         </div>
 
                         <div className="mb-4">
-                            <h6 className="fw-bold text-uppercase small text-secondary">Teléfonos:</h6>
+                            <h3 className="h6 fw-bold text-uppercase small texto-footer">Teléfonos:</h3>
                             <p className="mb-1">
                                 <a href={TALLER.telefono.href} className="text-white fw-bold text-decoration-none">{TALLER.telefono.texto}</a> (taller)
                             </p>
@@ -77,7 +78,7 @@ export const Contacto = () => {
                         </div>
 
                         <div className="mb-4">
-                            <h6 className="fw-bold text-uppercase small text-secondary">Horario:</h6>
+                            <h3 className="h6 fw-bold text-uppercase small texto-footer">Horario:</h3>
                             <p className="mb-1">Lunes a Viernes:</p>
                             <p className="fw-bold text-danger">08:30 - 13:30 | 16:00 - 19:00</p>
                             <p className="mb-1">Sábados y domingos:</p>

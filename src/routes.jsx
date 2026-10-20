@@ -9,19 +9,16 @@ import { ServicioDetalle } from "./pages/ServicioDetalle";
 import { Contacto } from "./pages/Contacto";
 import { Taller } from "./pages/Taller";
 import { Promociones } from "./pages/Promociones";
-import { Reservar } from "./pages/Reservar";
-import { GestionCita } from "./pages/GestionCita";
-import { AccesoGestion } from "./pages/AccesoGestion";
-import { PanelInterno } from "./pages/PanelInterno";
 import { Cookies } from "./pages/Cookies";
-import { Login } from "./pages/Login";
-import { Registro } from "./pages/Registro";
-import { MiCuenta } from "./pages/MiCuenta";
 import { NotFound } from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
 import { StoreProvider } from "./hooks/useGlobalReducer";
 import { PAGINAS_SERVICIO } from "./data/paginasServicio";
+
+// Páginas que solo se usan en el navegador (reserva, sesión, panel): se cargan bajo
+// demanda para que las páginas públicas no descarguen su código
+const bajoDemanda = (cargar, nombre) => () => cargar().then((m) => ({ Component: m[nombre] }));
 
 export const routes = [
   {
@@ -46,19 +43,19 @@ export const routes = [
       { path: "cookies", element: <Cookies /> },
       { path: "404", element: <NotFound /> },
 
-      { path: "login", element: <Login /> },
-      { path: "registro", element: <Registro /> },
-      { path: "gestion", element: <AccesoGestion /> },
-      { path: "reservar", element: <Reservar /> },
-      { path: "cita/:token", element: <GestionCita /> },
+      { path: "login", lazy: bajoDemanda(() => import("./pages/Login"), "Login") },
+      { path: "registro", lazy: bajoDemanda(() => import("./pages/Registro"), "Registro") },
+      { path: "gestion", lazy: bajoDemanda(() => import("./pages/AccesoGestion"), "AccesoGestion") },
+      { path: "reservar", lazy: bajoDemanda(() => import("./pages/Reservar"), "Reservar") },
+      { path: "cita/:token", lazy: bajoDemanda(() => import("./pages/GestionCita"), "GestionCita") },
       // Enlace antiguo de la reserva (antes pedía cuenta)
       { path: "urgente", element: <Navigate to="/reservar" replace /> },
 
       // Rutas que requieren estar registrado/logueado
-      { element: <ProtectedRoute />, children: [{ path: "mi-cuenta", element: <MiCuenta /> }] },
+      { element: <ProtectedRoute />, children: [{ path: "mi-cuenta", lazy: bajoDemanda(() => import("./pages/MiCuenta"), "MiCuenta") }] },
 
       // Rutas que requieren cuenta de administrador
-      { element: <AdminRoute />, children: [{ path: "panel-interno", element: <PanelInterno /> }] },
+      { element: <AdminRoute />, children: [{ path: "panel-interno", lazy: bajoDemanda(() => import("./pages/PanelInterno"), "PanelInterno") }] },
 
       { path: "*", element: <NotFound /> }
     ]

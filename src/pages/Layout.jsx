@@ -5,6 +5,7 @@ import { Footer } from "../components/Footer";
 import { CookieBanner } from "../components/CookieBanner";
 import { TALLER } from "../config";
 import { Icono } from "../components/Icono";
+import { BarraMovil } from "../components/BarraMovil";
 
 export const Layout = () => {
     return (
@@ -33,6 +34,8 @@ export const Layout = () => {
             <CookieBanner />
 
             <Footer />
+
+            <BarraMovil />
 
             {/* BOTÓN WHATSAPP */}
             <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer"

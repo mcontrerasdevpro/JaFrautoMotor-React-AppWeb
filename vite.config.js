@@ -17,8 +17,9 @@ export default defineConfig({
             return paths.filter((ruta) => ruta !== '*' && !ruta.includes(':') && !esRutaSoloCliente(ruta))
         },
         // Extrae el CSS crítico de cada página y carga el resto sin bloquear
+        // (media="print" + onload: no bloquea el primer pintado)
         beastiesOptions: {
-            preload: 'swap'
+            preload: 'media'
         }
     }
 })

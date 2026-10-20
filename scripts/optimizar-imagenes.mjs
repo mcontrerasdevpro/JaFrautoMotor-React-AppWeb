@@ -23,7 +23,7 @@ const manifiesto = {};
 
 for (const [nombre, original] of Object.entries(FOTOS)) {
     const imagen = sharp(`fotos/${original}`);
-    const { width } = await imagen.metadata();
+    const { width, height } = await imagen.metadata();
     // No ampliamos: si la foto es más pequeña que el ancho, se usa su tamaño real
     const anchos = [...new Set(ANCHOS.map((a) => Math.min(a, width)))];
     for (const ancho of anchos) {
@@ -31,11 +31,11 @@ for (const [nombre, original] of Object.entries(FOTOS)) {
         await base.clone().webp({ quality: 72 }).toFile(`public/img/${nombre}-${ancho}.webp`);
         await base.clone().avif({ quality: 50 }).toFile(`public/img/${nombre}-${ancho}.avif`);
     }
-    manifiesto[nombre] = anchos;
+    manifiesto[nombre] = { anchos, ancho: width, alto: height };
     console.log(`${nombre}: ${anchos.join(", ")} px`);
 }
 
-// Anchos disponibles de cada foto, para el srcset del componente Imagen
+// Anchos disponibles y tamaño original de cada foto (srcset y width/height del componente Imagen)
 await writeFile("src/data/imagenes.json", `${JSON.stringify(manifiesto, null, 2)}\n`);
 
 // Imagen para compartir en redes (Open Graph): JPG de 1200 px

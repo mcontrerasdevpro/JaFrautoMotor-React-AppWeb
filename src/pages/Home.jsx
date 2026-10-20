@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { TALLER } from "../config";
 import { Imagen } from "../components/Imagen";
 import { Seo } from "../components/Seo";
+import { Confianza } from "../components/Confianza";
 import { Icono } from "../components/Icono";
 
 export const Home = () => {
@@ -82,26 +83,28 @@ export const Home = () => {
                     <div className="col">
                         <div className="card border-0 shadow-lg p-4 h-100 hover-top rounded-0">
                             <div className="mb-3 text-danger"><Icono nombre="screwdriver-wrench" className="fa-3x" /></div>
-                            <h4 className="fw-bold text-uppercase">Mecánica General</h4>
+                            <h3 className="h4 fw-bold text-uppercase">Mecánica General</h3>
                             <p className="text-muted small">Desde cambios de aceite hasta reparaciones complejas de motor.</p>
                         </div>
                     </div>
                     <div className="col">
                         <div className="card border-0 shadow-lg p-4 h-100 bg-danger text-white hover-top rounded-0">
                             <div className="mb-3 text-white"><Icono nombre="car-burst" className="fa-3x" /></div>
-                            <h4 className="fw-bold text-uppercase">Asistencia Urgente</h4>
+                            <h3 className="h4 fw-bold text-uppercase">Asistencia Urgente</h3>
                             <p className="small">¿Te has quedado tirado? Prioridad máxima para averías en carretera.</p>
                         </div>
                     </div>
                     <div className="col">
                         <div className="card border-0 shadow-lg p-4 h-100 hover-top rounded-0 bg-white">
                             <div className="mb-3 text-danger"><Icono nombre="shield-halved" className="fa-3x" /></div>
-                            <h4 className="fw-bold text-uppercase">Revisión Pre-ITV</h4>
+                            <h3 className="h4 fw-bold text-uppercase">Revisión Pre-ITV</h3>
                             <p className="text-muted small">Revisamos 50 puntos clave para que pases la inspección sin sustos.</p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <Confianza />
 
             {/* BANNER WHATSAPP RESPONSIVO */}
             <section className="bg-white py-5 border-top border-bottom border-light">

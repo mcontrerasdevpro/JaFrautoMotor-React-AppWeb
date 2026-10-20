@@ -5,7 +5,7 @@ import { Icono } from "./Icono";
 // Barra fija en móvil con las tres acciones que más convierten en un taller
 export const BarraMovil = () => (
     <nav className="barra-movil d-md-none" aria-label="Acciones rápidas">
-        <a href={TALLER.telefono.href} className="barra-movil__accion bg-dark">
+        <a href={TALLER.telefono.href} className="barra-movil__accion">
             <Icono nombre="phone" />
             <span>Llamar</span>
         </a>
@@ -13,7 +13,7 @@ export const BarraMovil = () => (
             <Icono nombre="whatsapp" />
             <span>WhatsApp</span>
         </a>
-        <Link to="/reservar" className="barra-movil__accion bg-danger">
+        <Link to="/reservar" className="barra-movil__accion barra-movil__cita">
             <Icono nombre="calendar-check" />
             <span>Pedir cita</span>
         </Link>

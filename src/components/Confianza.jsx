@@ -10,15 +10,16 @@ const SELLOS = [
 ];
 
 export const Confianza = () => (
-    <section className="bg-white py-5 border-top" aria-labelledby="confianza-titulo">
+    <section className="seccion seccion-clara" aria-labelledby="confianza-titulo">
         <div className="container">
-            <h2 id="confianza-titulo" className="fw-bold text-center mb-4">
+            <p className="antetitulo">Confianza</p>
+            <h2 id="confianza-titulo" className="titulo-seccion mb-4">
                 Por qué confiar en <span className="text-danger">JaFrauto Motor</span>
             </h2>
             <div className="row g-3 mb-4">
                 {SELLOS.map((s) => (
                     <div className="col-md-4" key={s.titulo}>
-                        <div className="d-flex align-items-start gap-3 p-3 h-100 border-start border-4 border-danger bg-light">
+                        <div className="sello">
                             <Icono nombre={s.icono} className="fa-2x text-danger flex-shrink-0" />
                             <div>
                                 <h3 className="h6 fw-bold mb-1">{s.titulo}</h3>
@@ -28,9 +29,9 @@ export const Confianza = () => (
                     </div>
                 ))}
             </div>
-            <div className="text-center">
-                <p className="mb-2 text-secondary">¿Quieres saber qué opinan nuestros clientes?</p>
-                <a href={TALLER.resenasGoogle} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark rounded-0 fw-bold">
+            <div className="d-flex flex-wrap align-items-center gap-3">
+                <p className="mb-0 text-secondary">¿Quieres saber qué opinan nuestros clientes?</p>
+                <a href={TALLER.resenasGoogle} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark btn-lg">
                     VER RESEÑAS EN GOOGLE
                 </a>
             </div>

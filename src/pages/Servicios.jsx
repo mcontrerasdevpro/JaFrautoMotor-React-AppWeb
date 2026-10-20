@@ -1,4 +1,5 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { TALLER } from "../config";
 
 export const Servicios = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -87,11 +88,11 @@ export const Servicios = () => {
                 <h3 className="fw-bold">¿No encuentras lo que buscas?</h3>
                 <p className="mb-4">Llámanos directamente y cuéntanos qué le ocurre a tu vehículo.</p>
                 <a
-                    href="tel:+34659603058"
+                    href={TALLER.telefono.href}
                     className="btn btn-light btn-lg px-5 fw-bold text-danger text-center shadow"
                 >
                     LLAMAR AHORA <br />
-                    +34 659 603 058
+                    {TALLER.telefono.texto}
                 </a>
             </div>
         </div>

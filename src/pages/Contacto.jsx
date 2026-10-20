@@ -1,3 +1,5 @@
+import { TALLER } from "../config";
+
 export const Contacto = () => {
     return (
         <div className="container mt-1 pt-4 text-dark">
@@ -57,20 +59,26 @@ export const Contacto = () => {
 
                         <div className="mb-4">
                             <h6 className="fw-bold text-uppercase small text-secondary">Teléfonos:</h6>
-                            <p className="mb-1">637 830 670 (Francisco)</p>
-                            <p>659 603 058 (Jacinto)</p>
+                            <p className="mb-1">
+                                <a href={TALLER.telefono.href} className="text-white fw-bold text-decoration-none">{TALLER.telefono.texto}</a> (taller)
+                            </p>
+                            {TALLER.moviles.map((m) => (
+                                <p className="mb-1" key={m.href}>
+                                    <a href={m.href} className="text-white text-decoration-none">{m.texto}</a> ({m.nombre})
+                                </p>
+                            ))}
                         </div>
 
                         <div className="mb-4">
                             <h6 className="fw-bold text-uppercase small text-secondary">Horario:</h6>
                             <p className="mb-1">Lunes a Viernes:</p>
                             <p className="fw-bold text-danger">08:30 - 13:30 | 16:00 - 19:00</p>
-                            <p className="mb-1">Sabados y Domingos:</p>
+                            <p className="mb-1">Sábados y domingos:</p>
                             <p className="fw-bold text-danger">Cerrado</p>
                         </div>
 
                         <a
-                            href="https://www.google.com/maps"
+                            href={TALLER.comoLlegar}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-danger w-100 fw-bold rounded-0 py-2 mt-2 shadow"

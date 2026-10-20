@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { TALLER } from "../config";
 
 export const Footer = () => (
     <footer className="bg-dark text-white pt-5 pb-2 mt-auto" style={{ borderTop: "4px solid #fa0606" }}>
@@ -45,18 +46,20 @@ export const Footer = () => (
                                     <span>Calle Bedmar, 118, Pol. Olivares<br />23009 Jaén</span>
                                 </li>
                                 <li className="mb-2">
-                                    <a href="tel:+34637830670" className="text-secondary text-decoration-none hover-red d-block">
-                                        <i className="fa-solid fa-phone me-2 text-danger"></i>637 830 670 (Francisco)
+                                    <a href={TALLER.telefono.href} className="text-white fw-bold text-decoration-none hover-red d-block">
+                                        <i className="fa-solid fa-phone me-2 text-danger"></i>{TALLER.telefono.texto} (taller)
                                     </a>
                                 </li>
-                                <li className="mb-2">
-                                    <a href="tel:+34659603058" className="text-secondary text-decoration-none hover-red d-block">
-                                        <i className="fa-solid fa-phone me-2 text-danger"></i>659 603 058 (Jacinto)
-                                    </a>
-                                </li>
+                                {TALLER.moviles.map((m) => (
+                                    <li className="mb-2" key={m.href}>
+                                        <a href={m.href} className="text-secondary text-decoration-none hover-red d-block">
+                                            <i className="fa-solid fa-mobile-screen me-2 text-danger"></i>{m.texto} ({m.nombre})
+                                        </a>
+                                    </li>
+                                ))}
                                 <li>
-                                    <a href="mailto:jafrautomotor@gmail.com" className="text-secondary text-decoration-none hover-red d-block text-truncate">
-                                        <i className="fa-solid fa-envelope me-2 text-danger"></i>jafrautomotor@gmail.com
+                                    <a href={`mailto:${TALLER.email}`} className="text-secondary text-decoration-none hover-red d-block text-truncate">
+                                        <i className="fa-solid fa-envelope me-2 text-danger"></i>{TALLER.email}
                                     </a>
                                 </li>
                             </ul>

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { TALLER } from "../config";
 
 export const Home = () => {
     const estiloPulso = (
@@ -16,6 +17,10 @@ export const Home = () => {
             }
             /* Ajuste para que el rasgado no ensanche la web en móvil */
             .hero-section { overflow: hidden; position: relative; min-height: 85vh; background-color: #1a1a1a; }
+            .hero-capa { background: rgba(0,0,0,0.6); }
+            @media (min-width: 992px) {
+                .hero-capa { background: linear-gradient(115deg, rgba(26,26,26,1) 0%, rgba(26,26,26,0.9) 45%, rgba(26,26,26,0) 70%); }
+            }
         `}</style>
     );
 
@@ -50,19 +55,13 @@ export const Home = () => {
                 }}></div>
 
                 {/* 2. CAPA DIAGONAL IZQUIERDA (Sutil en móvil, fuerte en PC) */}
-                <div className="position-absolute top-0 start-0 h-100 w-100" style={{
-                    background: window.innerWidth > 992
-                        ? 'linear-gradient(115deg, rgba(26,26,26,1) 0%, rgba(26,26,26,0.9) 45%, rgba(26,26,26,0) 70%)'
-                        : 'rgba(0,0,0,0.6)',
-                    zIndex: 2
-                }}></div>
+                <div className="position-absolute top-0 start-0 h-100 w-100 hero-capa" style={{ zIndex: 2 }}></div>
 
                 {/* 3. EL "RASGADO" - FIBRA DE CARBONO (Solo visible en pantallas grandes) */}
                 <div className="position-absolute h-100 d-none d-lg-block" style={{
                     left: '45%',
                     width: '100px',
                     zIndex: 3,
-                    backgroundImage: 'url("https://www.transparenttextures.com")',
                     backgroundColor: 'rgba(0,0,0,0.4)',
                     boxShadow: '-20px 0 30px rgba(0,0,0,0.5)',
                     transform: 'skewX(-15deg)',
@@ -86,9 +85,9 @@ export const Home = () => {
                                 <Link to="/servicios" className="btn btn-danger btn-lg px-5 py-3 fw-bold shadow-lg rounded-0">
                                     VER SERVICIOS
                                 </Link>
-                                <Link to="/urgente" className="btn btn-outline-light btn-lg px-5 py-3 fw-bold rounded-0 boton-latido">
-                                    CITA URGENTE 🚨
-                                </Link>
+                                <a href={TALLER.telefono.href} className="btn btn-outline-light btn-lg px-5 py-3 fw-bold rounded-0 boton-latido">
+                                    <i className="fa-solid fa-phone me-2"></i>URGENCIAS: {TALLER.telefono.texto}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -114,7 +113,7 @@ export const Home = () => {
                     </div>
                     <div className="col">
                         <div className="card border-0 shadow-lg p-4 h-100 hover-top rounded-0 bg-white">
-                            <div className="mb-3 text-danger"><i className="fa-solid fa-shield-check fa-3x"></i></div>
+                            <div className="mb-3 text-danger"><i className="fa-solid fa-shield-halved fa-3x"></i></div>
                             <h4 className="fw-bold text-uppercase">Revisión Pre-ITV</h4>
                             <p className="text-muted small">Revisamos 50 puntos clave para que pases la inspección sin sustos.</p>
                         </div>
@@ -127,7 +126,7 @@ export const Home = () => {
                 <div className="container text-center px-4">
                     <h2 className="fw-bold mb-4">¿Hablamos por <span className="text-danger">WhatsApp</span>?</h2>
                     <p className="mb-4 mx-auto" style={{ maxWidth: '600px' }}>Envíanos una foto de tu avería o la ficha técnica y te damos presupuesto inmediato.</p>
-                    <a href="https://wa.me/659603058" target="_blank" rel="noopener noreferrer" className="btn btn-success btn-lg px-5 shadow rounded-0">
+                    <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-lg px-5 shadow rounded-0">
                         <i className="fa-brands fa-whatsapp me-2"></i> CONSULTAR AHORA
                     </a>
                 </div>

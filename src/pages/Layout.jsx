@@ -2,7 +2,8 @@ import { Outlet } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-import { CookieBanner } from "../components/CookieBanner"; // Importación confirmada
+import { CookieBanner } from "../components/CookieBanner";
+import { TALLER } from "../config";
 
 export const Layout = () => {
     return (
@@ -32,17 +33,11 @@ export const Layout = () => {
             {/* BANNER DE COOKIES: Aparece sobre el footer cuando es necesario */}
             <CookieBanner />
 
-            {/* FOOTER NATURAL */}
-            <footer style={{ 
-                backgroundColor: "#1a1a1a",
-                borderTop: "4px solid #fa0606",
-                width: "100%"
-            }}>
-                <Footer />
-            </footer>
+            <Footer />
 
             {/* BOTÓN WHATSAPP */}
-            <a href="https://wa.me/659603058" className="btn-whatsapp shadow-lg">
+            <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer"
+                className="btn-whatsapp shadow-lg" aria-label="Escríbenos por WhatsApp">
                 <i className="fa-brands fa-whatsapp"></i>
             </a>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
+import { TALLER } from "../config";
 
 export const Urgente = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -69,8 +70,8 @@ export const Urgente = () => {
             <div className="bg-danger p-4 rounded-0 mb-5 shadow-lg text-center text-white">
                 <h1 className="fw-bold mb-2">🚨 ASISTENCIA MECÁNICA INMEDIATA</h1>
                 <p className="mb-0 opacity-75 text-uppercase small fw-bold" style={{ letterSpacing: '2px' }}>Llámanos ahora para grúa o avería grave</p>
-                <a href="tel:+34659603058" className="btn btn-light fw-bold mt-3 px-5 py-2 text-danger shadow rounded-0 text-center">
-                    LLAMAR AHORA <br /> +34 659 603 058
+                <a href={TALLER.telefono.href} className="btn btn-light fw-bold mt-3 px-5 py-2 text-danger shadow rounded-0 text-center">
+                    LLAMAR AHORA <br /> {TALLER.telefono.texto}
                 </a>
             </div>
 

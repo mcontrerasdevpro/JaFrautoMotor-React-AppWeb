@@ -26,7 +26,7 @@ export const AvisoLegal = () => {
                             <li><strong>Denominación social:</strong> JAFRAUTO MOTOR SL</li>
                             <li><strong>NIF:</strong> B23792062</li>
                             <li><strong>Domicilio social:</strong> C/ BEDMAR 118 Polígono de los Olivares. 23009 JAEN</li>
-                            <li><strong>Teléfono:</strong> 637 830 670 Francisco; 659 603 058 Jacinto</li>
+                            <li><strong>Teléfono:</strong> 953 121 814 (taller); 637 830 670 (Francisco); 659 603 058 (Jacinto)</li>
                             <li><strong>e-mail:</strong> jafrautomotor@gmail.com</li>
                         </ul>
                     </section>

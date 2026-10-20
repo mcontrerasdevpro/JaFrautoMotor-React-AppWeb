@@ -17,3 +17,9 @@ export const TALLER = {
         encodeURIComponent("JaFrauto Motor, Calle Bedmar 118, 23009 Jaén"),
     mapaEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.864032769776!2d-3.7903449!3d37.7932261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6dd785dd31629f%3A0xdb2725b0e85794e2!2sJafrautomotor!5e0!3m2!1ses!2ses!4v1773799069849!5m2!1ses!2ses"
 };
+
+// Horas de entrada que se ofrecen al reservar (deben coincidir con FRANJAS_CITA de validacion.py)
+export const FRANJAS_CITA = {
+    "Mañana": ["08:30", "10:00", "11:30", "13:00"],
+    "Tarde": ["16:00", "17:30"]
+};

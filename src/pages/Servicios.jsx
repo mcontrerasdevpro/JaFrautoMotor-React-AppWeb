@@ -1,21 +1,43 @@
+import { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { apiFetch } from "../api";
 import { TALLER } from "../config";
+
+// Nombre, descripción y precio vienen de la API; aquí solo va la parte visual por id
+const PRESENTACION = {
+    1: { icon: "fa-oil-can", image: "/cambioaceite.jpg" },
+    2: { icon: "fa-circle-stop", image: "/sistemafrenos.jpg" },
+    3: { icon: "fa-microchip", image: "/diagnosis.png" },
+    4: { icon: "fa-compact-disc", image: "/neumaticos.png" },
+    5: { icon: "fa-snowflake", image: "/aireacondicionado.jpg" },
+    6: { icon: "fa-clipboard-check", image: "/preitv.png" }
+};
+const PRESENTACION_POR_DEFECTO = { icon: "fa-screwdriver-wrench", image: "/TallerMecanico.png" };
 
 export const Servicios = () => {
     const { store, dispatch } = useGlobalReducer();
     const { urgente, busqueda } = store;
+    const [cargando, setCargando] = useState(store.servicios.length === 0);
+    const [error, setError] = useState("");
 
-    // LISTA DE SERVICIOS (Asegúrate de que empiece con;
-    const catalogoServicios = [
-        { id: 1, name: "Cambio de Aceite", precio: 85, icon: "fa-oil-can", description: "Mantenimiento esencial con aceite sintético de alta gama.", image: "/cambioaceite.jpg" },
-        { id: 2, name: "Sistema de Frenos", precio: 120, icon: "fa-circle-stop", description: "Revisión y cambio de pastillas y discos para tu seguridad.", image: "/sistemafrenos.jpg" },
-        { id: 3, name: "Diagnosis Electrónica", precio: 45, icon: "fa-microchip", description: "Lectura de fallos con equipos de última generación.", image: "/diagnosis.png" },
-        { id: 4, name: "Neumáticos", precio: 100, icon: "fa-compact-disc", description: "Sustitución, equilibrado y alineación profesional.", image: "/neumaticos.png" },
-        { id: 5, name: "Aire Acondicionado", precio: 60, icon: "fa-snowflake", description: "Carga de gas y revisión de fugas para el confort total.", image: "aireacondicionado.jpg" },
-        { id: 6, name: "Revisión Pre-ITV", precio: 20, icon: "fa-clipboard-check", description: "Chequeo de 50 puntos clave para pasar la ITV a la primera.", image: "preitv.png" }
-    ];
+    useEffect(() => {
+        apiFetch("/services")
+            .then((data) => {
+                const catalogo = data.map((s) => ({
+                    id: s.id,
+                    name: s.name,
+                    description: s.description || "",
+                    precio: s.price,
+                    ...(PRESENTACION[s.id] || PRESENTACION_POR_DEFECTO)
+                }));
+                dispatch({ type: "set_servicios", payload: catalogo });
+                setError("");
+            })
+            .catch((err) => setError(err.message))
+            .finally(() => setCargando(false));
+    }, [dispatch]);
 
-    const serviciosFiltrados = catalogoServicios.filter(serv =>
+    const serviciosFiltrados = store.servicios.filter(serv =>
         serv.name.toLowerCase().includes((busqueda || "").toLowerCase()) ||
         serv.description.toLowerCase().includes((busqueda || "").toLowerCase())
     );
@@ -31,9 +53,20 @@ export const Servicios = () => {
                 <p className="text-muted lead">Selecciona los mantenimientos que necesites para obtener tu presupuesto.</p>
             </div>
 
+            {error && store.servicios.length === 0 && (
+                <div className="alert alert-warning text-center">
+                    No hemos podido cargar el catálogo ahora mismo. Llámanos al{" "}
+                    <a href={TALLER.telefono.href} className="fw-bold">{TALLER.telefono.texto}</a> y te atendemos.
+                </div>
+            )}
+
             <div className="row g-4">
-                {/* 3. MAPEAMOS LA LISTA FILTRADA */}
-                {serviciosFiltrados.length > 0 ? (
+                {cargando ? (
+                    <div className="col-12 text-center py-5 text-muted">
+                        <div className="spinner-border text-danger mb-3" role="status"></div>
+                        <p>Cargando servicios...</p>
+                    </div>
+                ) : serviciosFiltrados.length > 0 ? (
                     serviciosFiltrados.map((serv) => {
                         const estaEnUrgente = urgente.some(item => item.id === serv.id);
 
@@ -47,7 +80,7 @@ export const Servicios = () => {
                                             </span>
                                         </div>
 
-                                        <img src={serv.image} className="card-img-top" alt={serv.name} style={{ height: "200px", objectFit: "cover" }} />
+                                        <img src={serv.image} className="card-img-top" alt={serv.name} loading="lazy" style={{ height: "200px", objectFit: "cover" }} />
                                         <div className="position-absolute top-0 end-0 m-3">
                                             <i className={`fa-solid ${serv.icon} fa-2x text-white p-2 bg-danger rounded`}></i>
                                         </div>
@@ -72,7 +105,7 @@ export const Servicios = () => {
                             </div>
                         );
                     })
-                ) : (
+                ) : busqueda && (
                     /* Mensaje por si no hay resultados */
                     <div className="col-12 text-center py-5">
                         <h3 className="text-muted">No hay resultados para &quot;{busqueda}&quot;</h3>

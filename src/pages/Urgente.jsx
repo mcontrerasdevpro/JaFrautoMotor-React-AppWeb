@@ -1,7 +1,10 @@
 import { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
-import { TALLER } from "../config";
+import { TALLER, FRANJAS_CITA } from "../config";
+
+// Fecha local en formato AAAA-MM-DD (toISOString usaría UTC y podría cambiar el día)
+const fechaLocal = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 export const Urgente = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -10,6 +13,7 @@ export const Urgente = () => {
     const [seleccionado, setSeleccionado] = useState(null);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState("");
+    const [citaConfirmada, setCitaConfirmada] = useState(null);
 
     // ESTADOS DEL FORMULARIO
     const [fecha, setFecha] = useState("");
@@ -22,28 +26,25 @@ export const Urgente = () => {
         setError("");
         setCargando(true);
 
-        const listaServiciosJSON = urgente.map(s => ({ name: s.name, precio: s.precio }));
-
         try {
-            await apiFetch("/appointment", {
+            // Solo mandamos qué servicios son: el precio lo calcula el servidor
+            const data = await apiFetch("/appointment", {
                 method: "POST",
                 token: store.token,
                 body: {
                     date: fecha,
                     time: hora,
-                    services: listaServiciosJSON,
-                    total: totalEuros
+                    service_ids: urgente.map(s => s.id)
                 }
             });
 
-            alert("¡Cita registrada con éxito! Francisco o Jacinto te contactarán pronto.");
-
-            // Limpiar carrito tras éxito
-            urgente.forEach(item => dispatch({ type: 'toggle_urgente', payload: item }));
-
+            setCitaConfirmada(data.appointment);
+            window.scrollTo(0, 0);
+            dispatch({ type: "vaciar_urgente" });
+            setFecha("");
+            setHora("");
         } catch (error) {
-            console.error(error);
-            setError(error.message || "Hubo un problema. Asegúrate de que el Backend esté encendido.");
+            setError(error.message || "Hubo un problema al reservar. Llámanos y te atendemos.");
         } finally {
             setCargando(false);
         }
@@ -61,9 +62,34 @@ export const Urgente = () => {
         );
     }
 
-    const hoy = new Date();
-    hoy.setDate(hoy.getDate() + 1);
-    const fechaMinima = hoy.toISOString().split("T")[0];
+    const manana = new Date();
+    manana.setDate(manana.getDate() + 1);
+    const fechaMinima = fechaLocal(manana);
+    const limite = new Date();
+    limite.setDate(limite.getDate() + 90);
+    const fechaMaxima = fechaLocal(limite);
+
+    const cambiarFecha = (valor) => {
+        setFecha(valor);
+        const dia = new Date(`${valor}T12:00:00`).getDay();
+        setError(dia === 0 || dia === 6 ? "El taller abre de lunes a viernes. Elige otro día." : "");
+    };
+
+    if (citaConfirmada) {
+        return (
+            <div className="container mt-5 pt-5 text-dark text-center" style={{ minHeight: "70vh" }}>
+                <div className="card border-0 shadow-lg p-5 bg-white mx-auto" style={{ maxWidth: "640px" }}>
+                    <i className="fa-solid fa-calendar-check fa-4x text-danger mb-4"></i>
+                    <h1 className="h2 fw-bold">¡CITA REGISTRADA!</h1>
+                    <p className="lead text-secondary mb-1">
+                        {citaConfirmada.date} a las {citaConfirmada.time} · Total estimado {citaConfirmada.total}€
+                    </p>
+                    <p className="text-secondary">Francisco o Jacinto te contactarán para confirmarla. Te hemos enviado un email con los detalles.</p>
+                    <button className="btn btn-danger mt-3 px-5 rounded-0 fw-bold mx-auto" onClick={() => setCitaConfirmada(null)}>VOLVER</button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="container mt-5 pt-5 text-dark">
@@ -122,18 +148,22 @@ export const Urgente = () => {
 
                         <form onSubmit={manejarReserva}>
                             <div className="mb-3">
-                                <label className="small fw-bold text-uppercase opacity-75 mb-2">Día de la cita</label>
-                                <input type="date" min={fechaMinima} className="form-control bg-white text-dark border-0 rounded-0 py-2"
-                                    required value={fecha} onChange={(e) => setFecha(e.target.value)} />
+                                <label htmlFor="cita-fecha" className="small fw-bold text-uppercase opacity-75 mb-2">Día de la cita</label>
+                                <input id="cita-fecha" type="date" min={fechaMinima} max={fechaMaxima} className="form-control bg-white text-dark border-0 rounded-0 py-2"
+                                    required value={fecha} onChange={(e) => cambiarFecha(e.target.value)} />
+                                <div className="small opacity-75 mt-1">De lunes a viernes</div>
                             </div>
 
                             <div className="mb-3">
-                                <label className="small fw-bold text-uppercase opacity-75 mb-2">Hora preferente</label>
-                                <select className="form-select bg-white text-dark border-0 rounded-0 py-2"
+                                <label htmlFor="cita-hora" className="small fw-bold text-uppercase opacity-75 mb-2">Hora preferente</label>
+                                <select id="cita-hora" className="form-select bg-white text-dark border-0 rounded-0 py-2"
                                     required value={hora} onChange={(e) => setHora(e.target.value)}>
                                     <option value="">Seleccionar hora...</option>
-                                    <optgroup label="Mañana"><option>08:30</option><option>10:00</option><option>11:30</option><option>13:00</option></optgroup>
-                                    <optgroup label="Tarde"><option>16:00</option><option>17:30</option><option>19:00</option></optgroup>
+                                    {Object.entries(FRANJAS_CITA).map(([turno, horas]) => (
+                                        <optgroup label={turno} key={turno}>
+                                            {horas.map((h) => <option key={h}>{h}</option>)}
+                                        </optgroup>
+                                    ))}
                                 </select>
                             </div>
 

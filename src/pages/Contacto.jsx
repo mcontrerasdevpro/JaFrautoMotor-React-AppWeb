@@ -1,4 +1,6 @@
 import { TALLER } from "../config";
+import { MapaGoogle } from "../components/MapaGoogle";
+import { FormularioContacto } from "../components/FormularioContacto";
 
 export const Contacto = () => {
     return (
@@ -49,12 +51,12 @@ export const Contacto = () => {
                 {/* INFO DE CONTACTO */}
                 <div className="col-lg-4">
                     <div className="bg-dark text-white p-4 h-100 shadow-lg border-start border-4 border-danger">
-                        <h4 className="fw-bold mb-4 text-danger text-uppercase">Datos de Interés</h4>
+                        <h2 className="h4 fw-bold mb-4 text-danger text-uppercase">Datos de Interés</h2>
 
                         <div className="mb-4">
                             <h6 className="fw-bold text-uppercase small text-secondary">Dirección:</h6>
-                            <p className="mb-0">Calle Bedmar, 118, Nave</p>
-                            <p>Pol. los Olivares, 23009 Jaén</p>
+                            <p className="mb-0">{TALLER.direccion.calle}, Nave</p>
+                            <p>{TALLER.direccion.zona}, {TALLER.direccion.cp} {TALLER.direccion.ciudad}</p>
                         </div>
 
                         <div className="mb-4">
@@ -91,15 +93,32 @@ export const Contacto = () => {
                 {/* MAPA GRANDE */}
                 <div className="col-lg-8">
                     <div className="shadow-lg h-100" style={{ minHeight: "400px", borderRadius: "10px", overflow: "hidden", border: "1px solid #ddd" }}>
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.864032769776!2d-3.7903449!3d37.7932261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6dd785dd31629f%3A0xdb2725b0e85794e2!2sJafrautomotor!5e0!3m2!1ses!2ses!4v1773799069849!5m2!1ses!2ses"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0, display: "block", minHeight: "110px" }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade">
-                        </iframe>
+                        <MapaGoogle altoMinimo="400px" />
+                    </div>
+                </div>
+            </div>
+
+            {/* FORMULARIO DE CONTACTO */}
+            <div className="row g-4 mb-5">
+                <div className="col-lg-4">
+                    <h2 className="fw-bold text-uppercase">Escríbenos</h2>
+                    <div className="bg-danger mt-2 mb-3" style={{ width: "80px", height: "4px" }}></div>
+                    <p className="text-secondary">
+                        ¿Tienes una duda o quieres que te llamemos? Déjanos tu mensaje y te respondemos en horario de taller.
+                    </p>
+                    <p className="text-secondary mb-2">Si lo prefieres:</p>
+                    <div className="d-grid gap-2">
+                        <a href={TALLER.telefono.href} className="btn btn-dark rounded-0 fw-bold">
+                            <i className="fa-solid fa-phone me-2"></i>LLAMAR AL {TALLER.telefono.texto}
+                        </a>
+                        <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-success rounded-0 fw-bold">
+                            <i className="fa-brands fa-whatsapp me-2"></i>ESCRIBIR POR WHATSAPP
+                        </a>
+                    </div>
+                </div>
+                <div className="col-lg-8">
+                    <div className="card border-0 shadow-lg p-4 bg-white border-top border-5 border-danger">
+                        <FormularioContacto />
                     </div>
                 </div>
             </div>

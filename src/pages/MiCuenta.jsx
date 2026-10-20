@@ -134,6 +134,7 @@ export const MiCuenta = () => {
                                                     <td>
                                                         <span className={`badge px-3 rounded-pill small ${
                                                             cita.status === "Pendiente" ? "bg-warning text-dark" :
+                                                            cita.status === "Confirmada" ? "bg-primary" :
                                                             cita.status === "Cancelada" ? "bg-secondary" : "bg-success"
                                                         }`}>{cita.status}</span>
                                                     </td>

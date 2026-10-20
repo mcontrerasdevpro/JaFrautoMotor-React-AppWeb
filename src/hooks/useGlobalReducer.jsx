@@ -1,6 +1,7 @@
 import { useContext, useReducer, createContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import storeReducer, { initialStore } from "../store";
+import { EVENTO_SESION_CADUCADA } from "../api";
 
 const StoreContext = createContext();
 
@@ -12,6 +13,13 @@ export function StoreProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("taller_app_data", JSON.stringify(store));
     }, [store]);
+
+    // Si la API dice que el token ya no vale, cerramos la sesión en el navegador
+    useEffect(() => {
+        const cerrarSesion = () => dispatch({ type: "sesion_caducada" });
+        window.addEventListener(EVENTO_SESION_CADUCADA, cerrarSesion);
+        return () => window.removeEventListener(EVENTO_SESION_CADUCADA, cerrarSesion);
+    }, []);
 
     return (
         <StoreContext.Provider value={{ store, dispatch }}>

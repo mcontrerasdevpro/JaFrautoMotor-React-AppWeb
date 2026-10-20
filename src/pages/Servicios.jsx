@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { apiFetch } from "../api";
 import { TALLER } from "../config";
+import { Imagen } from "../components/Imagen";
+import { Seo } from "../components/Seo";
+import { Icono } from "../components/Icono";
 
 // Nombre, descripción y precio vienen de la API; aquí solo va la parte visual por id
 const PRESENTACION = {
-    1: { icon: "fa-oil-can", image: "/cambioaceite.jpg" },
-    2: { icon: "fa-circle-stop", image: "/sistemafrenos.jpg" },
-    3: { icon: "fa-microchip", image: "/diagnosis.png" },
-    4: { icon: "fa-compact-disc", image: "/neumaticos.png" },
-    5: { icon: "fa-snowflake", image: "/aireacondicionado.jpg" },
-    6: { icon: "fa-clipboard-check", image: "/preitv.png" }
+    1: { icon: "fa-oil-can", foto: "cambioaceite" },
+    2: { icon: "fa-circle-stop", foto: "sistemafrenos" },
+    3: { icon: "fa-microchip", foto: "diagnosis" },
+    4: { icon: "fa-compact-disc", foto: "neumaticos" },
+    5: { icon: "fa-snowflake", foto: "aireacondicionado" },
+    6: { icon: "fa-clipboard-check", foto: "preitv" }
 };
-const PRESENTACION_POR_DEFECTO = { icon: "fa-screwdriver-wrench", image: "/TallerMecanico.png" };
+const PRESENTACION_POR_DEFECTO = { icon: "fa-screwdriver-wrench", foto: "taller" };
 
 export const Servicios = () => {
     const { store, dispatch } = useGlobalReducer();
@@ -48,6 +51,7 @@ export const Servicios = () => {
 
      return (
         <div className="container py-4 py-lg-5 text-dark">
+            <Seo titulo="Servicios de taller mecánico en Jaén" descripcion="Cambio de aceite, frenos, diagnosis electrónica, neumáticos, aire acondicionado y pre-ITV en Jaén. Elige el servicio y pide cita online en JaFrauto Motor." ruta="/servicios" />
             <div className="text-center mb-5">
                 <h1 className="fw-bold display-4">NUESTROS <span className="text-danger">SERVICIOS</span></h1>
                 <p className="text-muted lead">Selecciona los mantenimientos que necesites para obtener tu presupuesto.</p>
@@ -62,7 +66,7 @@ export const Servicios = () => {
                         value={busqueda || ""}
                         onChange={(e) => dispatch({ type: "set_busqueda", payload: e.target.value })}
                     />
-                    <i className="fa-solid fa-magnifying-glass position-absolute end-0 top-50 translate-middle-y me-3 text-danger opacity-50" aria-hidden="true"></i>
+                    <Icono nombre="magnifying-glass" className="position-absolute end-0 top-50 translate-middle-y me-3 text-danger opacity-50" />
                 </div>
             </div>
 
@@ -93,9 +97,9 @@ export const Servicios = () => {
                                             </span>
                                         </div>
 
-                                        <img src={serv.image} className="card-img-top" alt={serv.name} loading="lazy" style={{ height: "200px", objectFit: "cover" }} />
+                                        <Imagen nombre={serv.foto} alt={serv.name} sizes="(min-width: 992px) 33vw, (min-width: 768px) 50vw, 100vw" className="card-img-top" style={{ height: "200px", objectFit: "cover" }} />
                                         <div className="position-absolute top-0 end-0 m-3">
-                                            <i className={`fa-solid ${serv.icon} fa-2x text-white p-2 bg-danger rounded`}></i>
+                                            <Icono nombre={serv.icon} className="fa-2x text-white p-2 bg-danger rounded" />
                                         </div>
                                     </div>
 
@@ -108,9 +112,9 @@ export const Servicios = () => {
                                             className={`btn w-100 fw-bold mt-3 rounded-0 py-2 transition-all ${estaEnUrgente ? "btn-dark" : "btn-outline-danger"}`}
                                         >
                                             {estaEnUrgente ? (
-                                                <> <i className="fa-solid fa-check me-2"></i>AÑADIDO A CITA</>
+                                                <> <Icono nombre="check" className="me-2" />AÑADIDO A CITA</>
                                             ) : (
-                                                <> <i className="fa-solid fa-plus me-2"></i>AÑADIR A MI CITA</>
+                                                <> <Icono nombre="plus" className="me-2" />AÑADIR A MI CITA</>
                                             )}
                                         </button>
                                     </div>

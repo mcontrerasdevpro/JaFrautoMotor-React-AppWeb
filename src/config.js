@@ -23,3 +23,11 @@ export const FRANJAS_CITA = {
     "Mañana": ["08:30", "10:00", "11:30", "13:00"],
     "Tarde": ["16:00", "17:30"]
 };
+
+// Dominio canónico y si la web debe indexarse. La demo de Vercel no se indexa
+// hasta migrar jafrautomotor.com (VITE_INDEXAR=true en el despliegue final).
+export const SITIO = {
+    url: (import.meta.env.VITE_SITE_URL || "https://jafrautomotor.com").replace(/\/$/, ""),
+    indexar: import.meta.env.VITE_INDEXAR === "true",
+    imagenSocial: "/img/portada-1200.jpg"
+};

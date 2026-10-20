@@ -4,6 +4,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CookieBanner } from "../components/CookieBanner";
 import { TALLER } from "../config";
+import { Icono } from "../components/Icono";
 
 export const Layout = () => {
     return (
@@ -36,25 +37,8 @@ export const Layout = () => {
             {/* BOTÓN WHATSAPP */}
             <a href={TALLER.whatsapp} target="_blank" rel="noopener noreferrer"
                 className="btn-whatsapp shadow-lg" aria-label="Escríbenos por WhatsApp">
-                <i className="fa-brands fa-whatsapp"></i>
+                <Icono nombre="whatsapp" />
             </a>
-
-            <style>{`
-                .btn-whatsapp {
-                    position: fixed;
-                    right: 20px;
-                    bottom: 20px;
-                    background: #25d366;
-                    color: white;
-                    border-radius: 50%;
-                    width: 56px; height: 56px;
-                    display: flex;
-                    align-items: center; justify-content: center;
-                    font-size: 28px; z-index: 5000; text-decoration: none;
-                    transition: transform 0.3s ease;
-                }
-                .btn-whatsapp:hover { transform: scale(1.1); color: white; }
-            `}</style>
         </div>
     );
 };

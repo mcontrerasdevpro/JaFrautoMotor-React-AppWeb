@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
+import { Imagen } from "../components/Imagen";
+import { Seo } from "../components/Seo";
+import { Icono } from "../components/Icono";
 
 
 export const Taller = () => {
     return (
         <div className="container py-4 py-lg-5 text-dark">
+            <Seo titulo="Sobre nuestro taller en Jaén" descripcion="Conoce JaFrauto Motor: taller mecánico de Francisco y Jacinto en el Polígono Los Olivares de Jaén, con más de 15 años de experiencia y equipos de diagnosis de última generación." ruta="/taller" />
             {/* SECCIÓN 1: INTRODUCCIÓN CON IMAGEN */}
             <div className="row align-items-center g-4 g-lg-5 mb-5">
                 {/* COLUMNA DE TEXTO */}
@@ -36,9 +40,12 @@ export const Taller = () => {
                 </div>
                 <div className="col-lg-6">
                     <div className="position-relative">
-                        <img
-                            src="/TallerMecanico.png"
-                            alt="Taller JaFrauto Motor"
+                        <Imagen
+                            nombre="taller"
+                            alt="Interior del taller JaFrauto Motor con elevadores y mecánicos trabajando"
+                            sizes="(min-width: 992px) 50vw, 100vw"
+                            width={1197}
+                            height={1059}
                             className="img-fluid shadow-lg"
                             style={{
                                 borderLeft: "8px solid #fa0606",
@@ -55,21 +62,21 @@ export const Taller = () => {
             <div className="row g-4 mb-5 text-center">
                 <div className="col-md-4">
                     <div className="p-4 border-0 shadow-sm bg-light h-100">
-                        <i className="fa-solid fa-microchip fa-3x text-danger mb-3"></i>
+                        <Icono nombre="microchip" className="fa-3x text-danger mb-3" />
                         <h5 className="fw-bold text-uppercase">Alta Tecnología</h5>
                         <p className="small text-muted">Equipos de diagnosis multimarca para detectar averías con precisión quirúrgica.</p>
                     </div>
                 </div>
                 <div className="col-md-4">
                     <div className="p-4 border-0 shadow-sm bg-danger text-white h-100">
-                        <i className="fa-solid fa-handshake-angle fa-3x mb-3"></i>
+                        <Icono nombre="handshake-angle" className="fa-3x mb-3" />
                         <h5 className="fw-bold text-uppercase text-white">Transparencia</h5>
                         <p className="small">Presupuestos cerrados y explicación detallada de cada reparación. Sin sorpresas en la factura.</p>
                     </div>
                 </div>
                 <div className="col-md-4">
                     <div className="p-4 border-0 shadow-sm bg-light h-100">
-                        <i className="fa-solid fa-clock fa-3x text-danger mb-3"></i>
+                        <Icono nombre="clock" className="fa-3x text-danger mb-3" />
                         <h5 className="fw-bold text-uppercase">Rapidez</h5>
                         <p className="small text-muted">Sabemos que tu tiempo es oro. Optimizamos procesos para entregas en tiempo récord.</p>
                     </div>

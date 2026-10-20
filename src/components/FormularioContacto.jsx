@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { apiFetch } from "../api";
 import { CasillaPrivacidad } from "./CasillaPrivacidad";
+import { Icono } from "./Icono";
 
 const FORMULARIO_VACIO = { name: "", phone: "", email: "", message: "" };
 
@@ -35,7 +36,7 @@ export const FormularioContacto = () => {
     if (enviado) {
         return (
             <div className="text-center py-4" role="status">
-                <i className="fa-solid fa-circle-check fa-3x text-success mb-3"></i>
+                <Icono nombre="circle-check" className="fa-3x text-success mb-3" />
                 <h3 className="h5 fw-bold">¡Mensaje enviado!</h3>
                 <p className="text-secondary mb-3">Te responderemos lo antes posible en horario de taller.</p>
                 <button type="button" className="btn btn-outline-danger rounded-0 fw-bold" onClick={() => setEnviado(false)}>

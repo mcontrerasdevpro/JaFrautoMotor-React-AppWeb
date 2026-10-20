@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { TALLER } from "../config";
 import useConsentimiento, { guardarConsentimiento } from "../hooks/useConsentimiento";
+import { Icono } from "./Icono";
 
 // El iframe de Google Maps instala cookies de terceros: solo se carga con consentimiento
 export const MapaGoogle = ({ altoMinimo = "110px", oscuro = false }) => {
@@ -24,7 +25,7 @@ export const MapaGoogle = ({ altoMinimo = "110px", oscuro = false }) => {
     return (
         <div className={`d-flex flex-column align-items-center justify-content-center text-center p-3 h-100 ${oscuro ? "bg-black text-white-50" : "bg-light text-secondary"}`}
             style={{ minHeight: altoMinimo }}>
-            <i className="fa-solid fa-map-location-dot fa-2x text-danger mb-2"></i>
+            <Icono nombre="map-location-dot" className="fa-2x text-danger mb-2" />
             <p className="small mb-2">
                 {TALLER.direccion.calle}, {TALLER.direccion.zona}, {TALLER.direccion.cp} {TALLER.direccion.ciudad}
             </p>

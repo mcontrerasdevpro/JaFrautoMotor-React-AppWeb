@@ -1,15 +1,11 @@
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Navigate,
-    Route,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { AvisoLegal } from "./pages/AvisoLegal";
 import { Presupuesto } from "./pages/Presupuesto";
 import { PoliticaPrivacidad } from "./pages/PoliticaPrivacidad";
 import { Servicios } from "./pages/Servicios";
+import { ServicioDetalle } from "./pages/ServicioDetalle";
 import { Contacto } from "./pages/Contacto";
 import { Taller } from "./pages/Taller";
 import { Promociones } from "./pages/Promociones";
@@ -24,40 +20,47 @@ import { MiCuenta } from "./pages/MiCuenta";
 import { NotFound } from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
+import { StoreProvider } from "./hooks/useGlobalReducer";
+import { PAGINAS_SERVICIO } from "./data/paginasServicio";
 
-export const router = createBrowserRouter(
-    createRoutesFromElements(
-      // Todas las rutas cuelgan del Layout (navbar, footer, cookies y WhatsApp)
-      <Route path="/" element={<Layout />} errorElement={<NotFound />}>
+export const routes = [
+  {
+    // Todas las rutas cuelgan del Layout (navbar, footer, cookies y WhatsApp)
+    path: "/",
+    element: <StoreProvider><Layout /></StoreProvider>,
+    errorElement: <NotFound />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "taller", element: <Taller /> },
+      { path: "servicios", element: <Servicios /> },
+      {
+        path: "servicios/:slug",
+        element: <ServicioDetalle />,
+        getStaticPaths: () => PAGINAS_SERVICIO.map((p) => `servicios/${p.slug}`)
+      },
+      { path: "promociones", element: <Promociones /> },
+      { path: "presupuesto", element: <Presupuesto /> },
+      { path: "contacto", element: <Contacto /> },
+      { path: "avisoLegal", element: <AvisoLegal /> },
+      { path: "politicaPrivacidad", element: <PoliticaPrivacidad /> },
+      { path: "cookies", element: <Cookies /> },
+      { path: "404", element: <NotFound /> },
 
-        <Route path="/" element={<Home />} />
-        <Route path="/avisoLegal" element={<AvisoLegal />} />
-        <Route path="/presupuesto" element={<Presupuesto />} />
-        <Route path="/politicaPrivacidad" element={<PoliticaPrivacidad />} />
-        <Route path="/servicios" element={<Servicios />} />
-        <Route path="/contacto" element={<Contacto />} />
-        <Route path="/taller" element={<Taller />} />
-        <Route path="/promociones" element={<Promociones />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/gestion" element={<AccesoGestion />} />
-        <Route path="/cookies" element={<Cookies />} />
-        <Route path="/reservar" element={<Reservar />} />
-        <Route path="/cita/:token" element={<GestionCita />} />
-        {/* Enlace antiguo de la reserva (antes pedía cuenta) */}
-        <Route path="/urgente" element={<Navigate to="/reservar" replace />} />
+      { path: "login", element: <Login /> },
+      { path: "registro", element: <Registro /> },
+      { path: "gestion", element: <AccesoGestion /> },
+      { path: "reservar", element: <Reservar /> },
+      { path: "cita/:token", element: <GestionCita /> },
+      // Enlace antiguo de la reserva (antes pedía cuenta)
+      { path: "urgente", element: <Navigate to="/reservar" replace /> },
 
-        {/* Rutas que requieren estar registrado/logueado */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/mi-cuenta" element={<MiCuenta />} />
-        </Route>
+      // Rutas que requieren estar registrado/logueado
+      { element: <ProtectedRoute />, children: [{ path: "mi-cuenta", element: <MiCuenta /> }] },
 
-        {/* Rutas que requieren cuenta de administrador */}
-        <Route element={<AdminRoute />}>
-          <Route path="/panel-interno" element={<PanelInterno />} />
-        </Route>
+      // Rutas que requieren cuenta de administrador
+      { element: <AdminRoute />, children: [{ path: "panel-interno", element: <PanelInterno /> }] },
 
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    )
-);
+      { path: "*", element: <NotFound /> }
+    ]
+  }
+];

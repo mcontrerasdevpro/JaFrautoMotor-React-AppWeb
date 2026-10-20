@@ -1,18 +1,32 @@
-import { useContext, useReducer, createContext, useEffect } from "react";
+import { useContext, useReducer, createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import storeReducer, { initialStore } from "../store";
+import storeReducer, { estadoInicial, guardar, leerGuardado } from "../store";
 import { EVENTO_SESION_CADUCADA } from "../api";
 
 const StoreContext = createContext();
 
-export function StoreProvider({ children }) {
-    // Arrancamos con lo que haya guardado en localStorage (si existe)
-    const [store, dispatch] = useReducer(storeReducer, initialStore());
+// En una página prerenderizada el HTML se generó sin datos del navegador: hay que
+// hidratar con el estado inicial y cargar lo guardado justo después. En el resto
+// (rutas privadas, que se renderizan solo en el cliente) se lee al momento.
+const esHidratacion = () =>
+    typeof document === "undefined" || document.querySelector("[data-server-rendered=true]") !== null;
 
-    // Cada vez que cambia el store lo guardamos en el navegador
+export function StoreProvider({ children }) {
+    const [hidratando] = useState(esHidratacion);
+    const [store, dispatch] = useReducer(storeReducer, undefined, () => (hidratando ? estadoInicial : leerGuardado()));
+    const [restaurado, setRestaurado] = useState(!hidratando);
+
     useEffect(() => {
-        localStorage.setItem("taller_app_data", JSON.stringify(store));
-    }, [store]);
+        if (hidratando) {
+            dispatch({ type: "restaurar", payload: leerGuardado() });
+            setRestaurado(true);
+        }
+    }, [hidratando]);
+
+    // Cada vez que cambia el store lo guardamos (nunca antes de haber cargado lo anterior)
+    useEffect(() => {
+        if (restaurado) guardar(store);
+    }, [store, restaurado]);
 
     // Si la API dice que el token ya no vale, cerramos la sesión en el navegador
     useEffect(() => {
@@ -22,7 +36,7 @@ export function StoreProvider({ children }) {
     }, []);
 
     return (
-        <StoreContext.Provider value={{ store, dispatch }}>
+        <StoreContext.Provider value={{ store, dispatch, restaurado }}>
             {children}
         </StoreContext.Provider>
     );

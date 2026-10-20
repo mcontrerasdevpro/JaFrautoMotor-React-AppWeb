@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 // Consentimiento de cookies de terceros (hoy solo Google Maps).
 // Valores: "aceptadas" | "rechazadas" | null (todavía no ha elegido)
+// | undefined (aún no se ha leído: durante el prerender y la hidratación)
 const CLAVE = "jafrauto_consentimiento_cookies";
 const EVENTO = "jafrauto:consentimiento";
 
@@ -28,10 +29,12 @@ export const guardarConsentimiento = (valor) => {
 export const abrirPreferenciasCookies = () => guardarConsentimiento(null);
 
 export default function useConsentimiento() {
-    const [consentimiento, setConsentimiento] = useState(leer);
+    // Se lee después de montar para que el HTML prerenderizado y el cliente coincidan
+    const [consentimiento, setConsentimiento] = useState(undefined);
 
     useEffect(() => {
         const actualizar = () => setConsentimiento(leer());
+        actualizar();
         window.addEventListener(EVENTO, actualizar);
         return () => window.removeEventListener(EVENTO, actualizar);
     }, []);

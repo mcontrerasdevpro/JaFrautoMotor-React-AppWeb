@@ -4,6 +4,7 @@ import { apiFetch } from "../api";
 import { TALLER } from "../config";
 import { SelectorHueco } from "../components/reserva/SelectorHueco";
 import { textoFecha } from "../utils/fechas";
+import { Icono } from "../components/Icono";
 
 const ACTIVAS = ["Pendiente", "Confirmada"];
 
@@ -51,7 +52,7 @@ export const GestionCita = () => {
     if (!cita) {
         return (
             <div className="container py-5 text-dark text-center" style={{ maxWidth: "640px" }}>
-                <i className="fa-solid fa-link-slash fa-3x text-danger mb-3"></i>
+                <Icono nombre="link-slash" className="fa-3x text-danger mb-3" />
                 <h1 className="h3 fw-bold">No encontramos esta cita</h1>
                 <p className="text-secondary">{error || "Revisa el enlace del email."} Si lo prefieres, llámanos al{" "}
                     <a href={TALLER.telefono.href} className="fw-bold text-danger">{TALLER.telefono.texto}</a>.</p>
@@ -82,10 +83,10 @@ export const GestionCita = () => {
                 {activa && !modo && (
                     <div className="d-flex flex-column flex-sm-row gap-2 mt-4">
                         <button type="button" className="btn btn-outline-dark rounded-0 fw-bold" onClick={() => setModo("cambiar")}>
-                            <i className="fa-solid fa-calendar-days me-2"></i>CAMBIAR DÍA U HORA
+                            <Icono nombre="calendar-days" className="me-2" />CAMBIAR DÍA U HORA
                         </button>
                         <button type="button" className="btn btn-outline-danger rounded-0 fw-bold" onClick={() => setModo("cancelar")}>
-                            <i className="fa-solid fa-xmark me-2"></i>CANCELAR CITA
+                            <Icono nombre="xmark" className="me-2" />CANCELAR CITA
                         </button>
                     </div>
                 )}

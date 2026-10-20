@@ -1,4 +1,4 @@
-const estadoInicial = {
+export const estadoInicial = {
   servicios: [],
   urgente: [],
   vehiculo: null,
@@ -9,23 +9,32 @@ const estadoInicial = {
   token: null
 };
 
-export const initialStore = () => {
-  const persistencia = localStorage.getItem("taller_app_data");
+const CLAVE_GUARDADO = "taller_app_data";
 
-  if (persistencia) {
-      try {
-          // Mezclamos con el estado inicial por si lo guardado es de una versión anterior
-          return { ...estadoInicial, ...JSON.parse(persistencia) };
-      } catch (e) {
-          console.error("Error al leer el localStorage", e);
-      }
+// Lo guardado en el navegador, mezclado con el estado inicial por si es de una versión anterior
+export const leerGuardado = () => {
+  try {
+    const persistencia = localStorage.getItem(CLAVE_GUARDADO);
+    return persistencia ? { ...estadoInicial, ...JSON.parse(persistencia) } : estadoInicial;
+  } catch {
+    return estadoInicial;
   }
+};
 
-  return estadoInicial;
+export const guardar = (store) => {
+  try {
+    localStorage.setItem(CLAVE_GUARDADO, JSON.stringify(store));
+  } catch {
+    // Sin localStorage (modo privado estricto): la sesión dura lo que la pestaña
+  }
 };
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
+    // Carga lo guardado en el navegador después de hidratar una página prerenderizada
+    case 'restaurar':
+      return action.payload;
+
     case 'set_servicios':
       return { ...store, servicios: action.payload };
 

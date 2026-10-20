@@ -1,0 +1,43 @@
+{
+  "portada": [
+    480,
+    800,
+    1196
+  ],
+  "fachada": [
+    480,
+    800,
+    1200
+  ],
+  "taller": [
+    480,
+    800,
+    1197
+  ],
+  "cambioaceite": [
+    480,
+    800,
+    1100
+  ],
+  "sistemafrenos": [
+    480,
+    800,
+    830
+  ],
+  "diagnosis": [
+    480,
+    737
+  ],
+  "neumaticos": [
+    466
+  ],
+  "aireacondicionado": [
+    480,
+    800,
+    1200
+  ],
+  "preitv": [
+    480,
+    572
+  ]
+}

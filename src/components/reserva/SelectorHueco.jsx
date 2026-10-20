@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { apiFetch } from "../../api";
 import { diaSiguiente, partesFecha, textoFecha } from "../../utils/fechas";
+import { Icono } from "../Icono";
 
 const DIAS_POR_PAGINA = 10;
 
@@ -59,11 +60,11 @@ export const SelectorHueco = ({ valor, onChange, recargar = 0 }) => {
                 <div className="d-flex gap-2">
                     {desde && (
                         <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setDesde(null)}>
-                            <i className="fa-solid fa-chevron-left me-1"></i>Primeros días
+                            <Icono nombre="chevron-left" className="me-1" />Primeros días
                         </button>
                     )}
                     <button type="button" className="btn btn-sm btn-outline-secondary" onClick={siguientePagina} disabled={cargando}>
-                        Más días<i className="fa-solid fa-chevron-right ms-1"></i>
+                        Más días<Icono nombre="chevron-right" className="ms-1" />
                     </button>
                 </div>
             </div>

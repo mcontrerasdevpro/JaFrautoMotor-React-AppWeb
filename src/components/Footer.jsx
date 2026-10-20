@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { TALLER } from "../config";
 import { MapaGoogle } from "./MapaGoogle";
 import { abrirPreferenciasCookies } from "../hooks/useConsentimiento";
+import { Icono } from "./Icono";
 
 export const Footer = () => (
     <footer className="bg-dark text-white pt-5 pb-2 mt-auto" style={{ borderTop: "4px solid #fa0606" }}>
@@ -17,9 +18,9 @@ export const Footer = () => (
                         Tu taller de confianza en Jaén. Calidad y rapidez en el Polígono de los Olivares.
                     </p>
                     <div className="d-flex gap-3 justify-content-center justify-content-md-start">
-                        <a href="https://www.facebook.com/jafrauto/?locale=es_LA" className="btn btn-outline-light btn-sm rounded-circle"><i className="fa-brands fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/jafrauto/" className="btn btn-outline-light btn-sm rounded-circle"><i className="fa-brands fa-instagram"></i></a>
-                        <a href="https://www.tiktok.com/tag/jafrautomotor" className="btn btn-outline-light btn-sm rounded-circle"><i className="fa-brands fa-tiktok"></i></a>
+                        <a href="https://www.facebook.com/jafrauto/?locale=es_LA" className="btn btn-outline-light btn-sm rounded-circle"><Icono nombre="facebook-f" /></a>
+                        <a href="https://www.instagram.com/jafrauto/" className="btn btn-outline-light btn-sm rounded-circle"><Icono nombre="instagram" /></a>
+                        <a href="https://www.tiktok.com/tag/jafrautomotor" className="btn btn-outline-light btn-sm rounded-circle"><Icono nombre="tiktok" /></a>
                     </div>
                 </div>
 
@@ -44,24 +45,24 @@ export const Footer = () => (
                             <ul className="list-unstyled small mb-0">
                                 {/* Ajustada la dirección: justify-content-center para móvil y start para PC */}
                                 <li className="mb-2 text-secondary d-flex align-items-start justify-content-center justify-content-md-start">
-                                    <i className="fa-solid fa-location-dot me-2 text-danger mt-1"></i>
+                                    <Icono nombre="location-dot" className="me-2 text-danger mt-1" />
                                     <span>Calle Bedmar, 118, Pol. Olivares<br />23009 Jaén</span>
                                 </li>
                                 <li className="mb-2">
                                     <a href={TALLER.telefono.href} className="text-white fw-bold text-decoration-none hover-red d-block">
-                                        <i className="fa-solid fa-phone me-2 text-danger"></i>{TALLER.telefono.texto} (taller)
+                                        <Icono nombre="phone" className="me-2 text-danger" />{TALLER.telefono.texto} (taller)
                                     </a>
                                 </li>
                                 {TALLER.moviles.map((m) => (
                                     <li className="mb-2" key={m.href}>
                                         <a href={m.href} className="text-secondary text-decoration-none hover-red d-block">
-                                            <i className="fa-solid fa-mobile-screen me-2 text-danger"></i>{m.texto} ({m.nombre})
+                                            <Icono nombre="mobile-screen" className="me-2 text-danger" />{m.texto} ({m.nombre})
                                         </a>
                                     </li>
                                 ))}
                                 <li>
                                     <a href={`mailto:${TALLER.email}`} className="text-secondary text-decoration-none hover-red d-block text-truncate">
-                                        <i className="fa-solid fa-envelope me-2 text-danger"></i>{TALLER.email}
+                                        <Icono nombre="envelope" className="me-2 text-danger" />{TALLER.email}
                                     </a>
                                 </li>
                             </ul>
@@ -81,7 +82,7 @@ export const Footer = () => (
                 <div className="row align-items-center">
                     <div className="col-md-7 text-center text-md-start">
                         <p className="small text-secondary mb-0">
-                            COPYRIGHT &nbsp; © {new Date().getFullYear()} JAFRAUTO MOTOR | <i className="fa-solid fa-wrench text-danger mx-1" />Desarrollo y diseño Web realizado por Miguel Contreras.
+                            COPYRIGHT &nbsp; © {new Date().getFullYear()} JAFRAUTO MOTOR | <Icono nombre="wrench" className="text-danger mx-1" />Desarrollo y diseño Web realizado por Miguel Contreras.
                         </p>
                     </div>
                     <div className="col-md-5 text-center text-md-end mt-2 mt-md-0">
@@ -93,9 +94,5 @@ export const Footer = () => (
                 </div>
             </div>
         </div>
-
-        <style>{`
-            .hover-red:hover { color: #fa0606 !important; transition: 0.3s; }
-        `}</style>
     </footer>
 );
